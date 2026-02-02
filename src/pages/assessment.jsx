@@ -677,7 +677,13 @@ export default function Assessment(props) {
             {/* Risk Result */}
             <Card className="bg-white rounded-2xl p-4 md:p-8 shadow-xl">
               {(() => {
-            const riskInfo = getRiskInfo(riskLevel.level, answers) || {
+            const riskInfo = riskLevel && riskLevel.level ? getRiskInfo(riskLevel.level, answers) || {
+              color: '#64748B',
+              icon: Info,
+              title: '评估结果',
+              description: '无法加载评估结果',
+              suggestions: ['请重新完成评估']
+            } : {
               color: '#64748B',
               icon: Info,
               title: '评估结果',
