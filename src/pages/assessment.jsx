@@ -454,6 +454,11 @@ export default function Assessment(props) {
     });
   };
   const getRiskInfo = (level, answers) => {
+    // 参数验证：确保 level 和 answers 有效
+    if (!level || !answers || typeof answers !== 'object') {
+      return null;
+    }
+
     // 根据用户的具体情况生成个性化建议
     const occupation = answers['occupation']?.value;
     const debtAmount = answers['debt_amount']?.value;
@@ -549,36 +554,34 @@ export default function Assessment(props) {
     // 合并所有个性化建议
     const allSuggestions = [...getOccupationSuggestions(occupation), ...getDebtAmountSuggestions(debtAmount), ...getPaymentAbilitySuggestions(paymentAbility), ...getLegalActionSuggestions(legalAction), ...getContactMethodSuggestions(contactMethod)];
 
-    // 去重并限制建议数量
-    const uniqueSuggestions = [...new Set(allSuggestions)].slice(0, 12);
-    switch (level) {
-      case 'low':
-        return {
-          color: '#10B981',
-          icon: CheckCircle,
-          title: '低风险',
-          description: '当前风险较低，建议保持沟通，按时还款',
-          suggestions: uniqueSuggestions
-        };
-      case 'medium':
-        return {
-          color: '#F59E0B',
-          icon: AlertTriangle,
-          title: '中等风险',
-          description: '存在一定风险，建议主动协商，制定应对方案',
-          suggestions: uniqueSuggestions
-        };
-      case 'high':
-        return {
-          color: '#EF4444',
-          icon: XCircle,
-          title: '高风险',
-          description: '风险较高，建议寻求专业法律帮助，谨慎应对',
-          suggestions: uniqueSuggestions
-        };
-      default:
-        return null;
-    }
+    // 去重并限制建议数量，确保 suggestions 是数组
+    const uniqueSuggestions = Array.isArray(allSuggestions) ? [...new Set(allSuggestions)].slice(0, 12) : [];
+
+    // 根据风险等级返回对应信息
+    const riskInfoMap = {
+      low: {
+        color: '#10B981',
+        icon: CheckCircle,
+        title: '低风险',
+        description: '当前风险较低，建议保持沟通，按时还款',
+        suggestions: uniqueSuggestions
+      },
+      medium: {
+        color: '#F59E0B',
+        icon: AlertTriangle,
+        title: '中等风险',
+        description: '存在一定风险，建议主动协商，制定应对方案',
+        suggestions: uniqueSuggestions
+      },
+      high: {
+        color: '#EF4444',
+        icon: XCircle,
+        title: '高风险',
+        description: '风险较高，建议寻求专业法律帮助，谨慎应对',
+        suggestions: uniqueSuggestions
+      }
+    };
+    return riskInfoMap[level] || null;
   };
   return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 font-['JetBrains_Mono']">
       {/* Header */}
@@ -677,19 +680,21 @@ export default function Assessment(props) {
             {/* Risk Result */}
             <Card className="bg-white rounded-2xl p-4 md:p-8 shadow-xl">
               {(() => {
-            const riskInfo = riskLevel && riskLevel.level ? getRiskInfo(riskLevel.level, answers) || {
-              color: '#64748B',
-              icon: Info,
-              title: '评估结果',
-              description: '无法加载评估结果',
-              suggestions: ['请重新完成评估']
-            } : {
+            // 确保 riskInfo 始终是一个有效的对象
+            const defaultRiskInfo = {
               color: '#64748B',
               icon: Info,
               title: '评估结果',
               description: '无法加载评估结果',
               suggestions: ['请重新完成评估']
             };
+            let riskInfo = defaultRiskInfo;
+            if (riskLevel && riskLevel.level && answers) {
+              const result = getRiskInfo(riskLevel.level, answers);
+              if (result && result.title && result.suggestions) {
+                riskInfo = result;
+              }
+            }
             const RiskIcon = riskInfo.icon;
             return <>
                     <div className="text-center mb-6 md:mb-8">
