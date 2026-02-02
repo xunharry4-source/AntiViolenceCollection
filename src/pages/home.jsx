@@ -139,6 +139,10 @@ export default function Home(props) {
               <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
               <p className="text-sm md:text-base text-[#64748B]">不直接对抗催收，提供合法沟通指引</p>
             </div>
+            <div className="flex items-start gap-3 sm:col-span-2">
+              <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+              <p className="text-sm md:text-base text-[#64748B]">不评估第三方催收或银行提供的解决方案是否有效，请自行判断或咨询专业人士</p>
+            </div>
           </div>
         </div>
       </main>
