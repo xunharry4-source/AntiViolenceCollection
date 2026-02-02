@@ -361,7 +361,24 @@ export default function Assessment(props) {
     }
   };
   const handleNext = () => {
+    // 确保 currentStep 在有效范围内
+    if (currentStep < 0 || currentStep >= questions.length) {
+      console.error('Invalid currentStep:', currentStep);
+      toast({
+        title: '页面状态异常，请重新开始',
+        variant: 'destructive'
+      });
+      return;
+    }
     const currentQuestion = questions[currentStep];
+    if (!currentQuestion) {
+      console.error('Current question not found:', currentStep);
+      toast({
+        title: '页面状态异常，请重新开始',
+        variant: 'destructive'
+      });
+      return;
+    }
     const currentAnswer = answers[currentQuestion.id];
 
     // 检查是否已选择答案
@@ -399,9 +416,11 @@ export default function Assessment(props) {
     }
   };
   const handlePrevious = () => {
-    if (currentStep > 0) {
-      setCurrentStep(prev => prev - 1);
+    // 确保 currentStep 在有效范围内
+    if (currentStep <= 0 || currentStep >= questions.length) {
+      return;
     }
+    setCurrentStep(prev => prev - 1);
   };
   const calculateRisk = async () => {
     const totalRisk = Object.values(answers).reduce((sum, answer) => sum + answer.risk, 0);
@@ -876,10 +895,16 @@ export default function Assessment(props) {
                       <Button onClick={() => {
                   // 清除本地存储的评估结果
                   localStorage.removeItem('assessment_result');
+                  // 重置所有状态
                   setCurrentStep(0);
                   setAnswers({});
                   setRiskLevel(null);
                   setOtherContactMethod('');
+                  // 显示成功提示
+                  toast({
+                    title: '已重置评估状态',
+                    variant: 'default'
+                  });
                 }} variant="outline" className="flex-1 text-xs md:text-sm">
                         重新评估
                       </Button>
