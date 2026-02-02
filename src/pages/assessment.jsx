@@ -361,36 +361,8 @@ export default function Assessment(props) {
       });
     }
 
-    // 保存评估结果到云函数
-    try {
-      const result = await props.$w.cloud.callFunction({
-        name: 'saveAssessment',
-        data: {
-          occupation: answers['occupation']?.value || '',
-          contact_method: Array.isArray(answers['contact_method']?.value) ? answers['contact_method'].value : [],
-          debt_amount: answers['debt_amount']?.value || '',
-          payment_ability: answers['payment_ability']?.value || '',
-          legal_action: answers['legal_action']?.value || '',
-          other_contact_method: otherContactMethod || '',
-          risk_level: level,
-          risk_percentage: Math.round(riskPercentage),
-          total_risk: totalRisk,
-          illegal_behaviors: illegalBehaviors
-        }
-      });
-      console.log('评估结果已保存:', result);
-      toast({
-        title: '评估结果已保存',
-        description: '您的风险评估记录已成功保存'
-      });
-    } catch (error) {
-      console.error('保存评估结果失败:', error);
-      toast({
-        title: '保存失败',
-        description: error.message || '保存评估结果时出错',
-        variant: 'destructive'
-      });
-    }
+    // 暂时去掉保存用户选择的功能
+    // TODO: 后续如需保存，可恢复调用云函数保存评估结果
     setRiskLevel({
       level,
       percentage: riskPercentage,
