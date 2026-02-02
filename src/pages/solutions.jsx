@@ -1,7 +1,7 @@
 // @ts-ignore;
 import React, { useState } from 'react';
 // @ts-ignore;
-import { ArrowLeft, FileText, MessageSquare, ListChecks, ChevronRight, Copy, Check } from 'lucide-react';
+import { ArrowLeft, FileText, MessageSquare, ListChecks, ChevronRight, Copy, Check, AlertTriangle } from 'lucide-react';
 // @ts-ignore;
 import { useToast, Button, Card, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui';
 
@@ -73,6 +73,23 @@ export default function Solutions(props) {
     id: 3,
     title: '协商后跟进',
     items: ['确认协商结果并保留书面凭证', '按时履行协商约定', '定期与债权方沟通进度', '如遇问题及时联系', '保存所有还款记录']
+  }];
+  const communicationTips = [{
+    id: 1,
+    title: '沟通前准备',
+    tips: ['保持冷静，不要情绪化', '准备好相关文件和证据', '明确自己的还款能力和底线', '选择合适的沟通时间', '确保通话环境安静']
+  }, {
+    id: 2,
+    title: '沟通中要点',
+    tips: ['态度诚恳，表达还款意愿', '如实说明困难情况', '不要做出无法兑现的承诺', '记录对方的承诺和要求', '要求对方提供书面确认']
+  }, {
+    id: 3,
+    title: '沟通后跟进',
+    tips: ['及时整理沟通记录', '确认协商结果并保留凭证', '按时履行约定', '定期主动联系更新情况', '如遇问题及时沟通']
+  }, {
+    id: 4,
+    title: '避免行为',
+    tips: ['不要失联或拒接电话', '不要辱骂或威胁对方', '不要提供虚假信息', '不要轻易转账给个人账户', '不要签署不明确的协议']
   }];
   const complaintInfo = [{
     id: 1,
@@ -162,36 +179,73 @@ export default function Solutions(props) {
 
           {/* Scripts Tab */}
           <TabsContent value="scripts">
-            <div className="grid grid-cols-2 gap-6">
-              {negotiationScripts.map(script => <Card key={script.id} className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
-                  <div className="flex items-start justify-between mb-4">
+            <div className="grid grid-cols-3 gap-6">
+              {/* 话术模板区域 - 占2列 */}
+              <div className="col-span-2 grid grid-cols-2 gap-6">
+                {negotiationScripts.map(script => <Card key={script.id} className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <span className="text-xs font-semibold text-[#F59E0B] uppercase tracking-wider">
+                          {script.category}
+                        </span>
+                        <h3 className="text-lg font-bold font-['Space_Grotesk'] text-[#1E3A5F] mt-1">
+                          {script.title}
+                        </h3>
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {script.tags.map(tag => <span key={tag} className="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded">
+                          {tag}
+                        </span>)}
+                    </div>
+                    <p className="text-[#64748B] text-sm leading-relaxed mb-4">
+                      {script.content}
+                    </p>
+                    <Button onClick={() => handleCopy(script.content, script.id)} variant="outline" size="sm" className="w-full">
+                      {copiedId === script.id ? <>
+                          <Check className="w-4 h-4 mr-2" />
+                          已复制
+                        </> : <>
+                          <Copy className="w-4 h-4 mr-2" />
+                          复制话术
+                        </>}
+                    </Button>
+                  </Card>)}
+              </div>
+
+              {/* 沟通注意事项区域 - 占1列 */}
+              <div className="col-span-1 space-y-6">
+                <Card className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-6 shadow-lg border-2 border-amber-200">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center">
+                      <AlertTriangle className="w-5 h-5 text-amber-600" />
+                    </div>
                     <div>
-                      <span className="text-xs font-semibold text-[#F59E0B] uppercase tracking-wider">
-                        {script.category}
-                      </span>
-                      <h3 className="text-lg font-bold font-['Space_Grotesk'] text-[#1E3A5F] mt-1">
-                        {script.title}
+                      <h3 className="text-lg font-bold font-['Space_Grotesk'] text-[#1E3A5F]">
+                        沟通注意事项
                       </h3>
+                      <p className="text-xs text-amber-600 font-semibold">
+                        重要提示
+                      </p>
                     </div>
                   </div>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {script.tags.map(tag => <span key={tag} className="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded">
-                        {tag}
-                      </span>)}
+
+                  <div className="space-y-6">
+                    {communicationTips.map(tip => <div key={tip.id}>
+                        <h4 className="text-sm font-bold text-[#1E3A5F] mb-3 flex items-center gap-2">
+                          <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+                          {tip.title}
+                        </h4>
+                        <ul className="space-y-2">
+                          {tip.tips.map((item, index) => <li key={index} className="flex items-start gap-2">
+                              <span className="text-amber-500 mt-1">•</span>
+                              <span className="text-xs text-[#64748B] leading-relaxed">{item}</span>
+                            </li>)}
+                        </ul>
+                      </div>)}
                   </div>
-                  <p className="text-[#64748B] text-sm leading-relaxed mb-4">
-                    {script.content}
-                  </p>
-                  <Button onClick={() => handleCopy(script.content, script.id)} variant="outline" size="sm" className="w-full">
-                    {copiedId === script.id ? <>
-                        <Check className="w-4 h-4 mr-2" />
-                        已复制
-                      </> : <>
-                        <Copy className="w-4 h-4 mr-2" />
-                        复制话术
-                      </>}
-                  </Button>
-                </Card>)}
+                </Card>
+              </div>
             </div>
           </TabsContent>
 
