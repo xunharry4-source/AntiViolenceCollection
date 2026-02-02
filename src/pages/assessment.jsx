@@ -361,24 +361,21 @@ export default function Assessment(props) {
       });
     }
 
-    // 保存评估结果到数据模型
+    // 保存评估结果到云函数
     try {
-      const result = await props.$w.cloud.callDataSource({
-        dataSourceName: 'assessments',
-        methodName: 'wedaCreateV2',
-        params: {
-          data: {
-            occupation: answers['occupation']?.value || '',
-            contact_method: Array.isArray(answers['contact_method']?.value) ? answers['contact_method'].value : [],
-            debt_amount: answers['debt_amount']?.value || '',
-            payment_ability: answers['payment_ability']?.value || '',
-            legal_action: answers['legal_action']?.value || '',
-            other_contact_method: otherContactMethod || '',
-            risk_level: level,
-            risk_percentage: Math.round(riskPercentage),
-            total_risk: totalRisk,
-            illegal_behaviors: illegalBehaviors
-          }
+      const result = await props.$w.cloud.callFunction({
+        name: 'saveAssessment',
+        data: {
+          occupation: answers['occupation']?.value || '',
+          contact_method: Array.isArray(answers['contact_method']?.value) ? answers['contact_method'].value : [],
+          debt_amount: answers['debt_amount']?.value || '',
+          payment_ability: answers['payment_ability']?.value || '',
+          legal_action: answers['legal_action']?.value || '',
+          other_contact_method: otherContactMethod || '',
+          risk_level: level,
+          risk_percentage: Math.round(riskPercentage),
+          total_risk: totalRisk,
+          illegal_behaviors: illegalBehaviors
         }
       });
       console.log('评估结果已保存:', result);
