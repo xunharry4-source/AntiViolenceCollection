@@ -13,10 +13,42 @@ export default function Assessment(props) {
     navigateTo,
     navigateBack
   } = props.$w.utils;
-  const [currentStep, setCurrentStep] = useState(0);
-  const [answers, setAnswers] = useState({});
-  const [riskLevel, setRiskLevel] = useState(null);
-  const [otherContactMethod, setOtherContactMethod] = useState('');
+  const [currentStep, setCurrentStep] = useState(() => {
+    // 从本地存储恢复评估状态
+    const savedAssessment = localStorage.getItem('assessment_result');
+    if (savedAssessment) {
+      const parsed = JSON.parse(savedAssessment);
+      return parsed.completed ? parsed.currentStep : 0;
+    }
+    return 0;
+  });
+  const [answers, setAnswers] = useState(() => {
+    // 从本地存储恢复评估状态
+    const savedAssessment = localStorage.getItem('assessment_result');
+    if (savedAssessment) {
+      const parsed = JSON.parse(savedAssessment);
+      return parsed.completed ? parsed.answers : {};
+    }
+    return {};
+  });
+  const [riskLevel, setRiskLevel] = useState(() => {
+    // 从本地存储恢复评估状态
+    const savedAssessment = localStorage.getItem('assessment_result');
+    if (savedAssessment) {
+      const parsed = JSON.parse(savedAssessment);
+      return parsed.completed ? parsed.riskLevel : null;
+    }
+    return null;
+  });
+  const [otherContactMethod, setOtherContactMethod] = useState(() => {
+    // 从本地存储恢复评估状态
+    const savedAssessment = localStorage.getItem('assessment_result');
+    if (savedAssessment) {
+      const parsed = JSON.parse(savedAssessment);
+      return parsed.completed ? parsed.otherContactMethod : '';
+    }
+    return '';
+  });
   const questions = [{
     id: 'occupation',
     title: '职业',
@@ -374,8 +406,18 @@ export default function Assessment(props) {
       });
     }
 
-    // 暂时去掉保存用户选择的功能
-    // TODO: 后续如需保存，可恢复调用云函数保存评估结果
+    // 保存评估结果到本地存储
+    const assessmentResult = {
+      level,
+      percentage: riskPercentage,
+      totalRisk,
+      illegalBehaviors,
+      completed: true,
+      currentStep: questions.length,
+      answers,
+      otherContactMethod
+    };
+    localStorage.setItem('assessment_result', JSON.stringify(assessmentResult));
     setRiskLevel({
       level,
       percentage: riskPercentage,
@@ -719,9 +761,12 @@ export default function Assessment(props) {
                     {/* Action Buttons */}
                     <div className="flex gap-3 md:gap-4">
                       <Button onClick={() => {
+                  // 清除本地存储的评估结果
+                  localStorage.removeItem('assessment_result');
                   setCurrentStep(0);
                   setAnswers({});
                   setRiskLevel(null);
+                  setOtherContactMethod('');
                 }} variant="outline" className="flex-1 text-xs md:text-sm">
                         重新评估
                       </Button>
