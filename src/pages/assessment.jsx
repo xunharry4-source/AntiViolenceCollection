@@ -20,8 +20,11 @@ export default function Assessment(props) {
       try {
         const parsed = JSON.parse(savedAssessment);
         // 验证数据结构是否完整
-        if (parsed.completed && parsed.currentStep) {
-          return parsed.currentStep;
+        if (parsed.completed && parsed.currentStep !== undefined) {
+          // 如果评估已完成，确保 currentStep 在有效范围内
+          // 如果 currentStep 超出范围，设置为最后一个问题的索引
+          const maxStep = questions.length - 1;
+          return Math.min(parsed.currentStep, maxStep);
         }
       } catch (error) {
         console.error('Failed to parse saved assessment:', error);
@@ -674,15 +677,15 @@ export default function Assessment(props) {
             <div className="mb-4 md:mb-8">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-xs md:text-sm text-[#64748B]">
-                  问题 {currentStep + 1} / {questions.length}
+                  问题 {Math.min(currentStep + 1, questions.length)} / {questions.length}
                 </span>
                 <span className="text-xs md:text-sm font-semibold text-[#1E3A5F]">
-                  {Math.round((currentStep + 1) / questions.length * 100)}%
+                  {Math.round(Math.min(currentStep + 1, questions.length) / questions.length * 100)}%
                 </span>
               </div>
               <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
                 <div className="h-full bg-[#1E3A5F] transition-all duration-500" style={{
-              width: `${(currentStep + 1) / questions.length * 100}%`
+              width: `${Math.min(currentStep + 1, questions.length) / questions.length * 100}%`
             }}></div>
               </div>
             </div>
