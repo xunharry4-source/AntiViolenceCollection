@@ -1425,59 +1425,62 @@ export default function Knowledge(props) {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-8 py-12">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
         {/* Search Bar */}
-        <Card className="bg-white rounded-xl p-6 shadow-lg mb-8">
-          <div className="flex gap-4">
+        <Card className="bg-white rounded-xl p-4 sm:p-6 shadow-lg mb-4 sm:mb-6 lg:mb-8">
+          <div className="flex gap-2 sm:gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#64748B]" />
-              <Input placeholder="搜索法律知识、法规、案例..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pl-12 h-12" />
+              <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-[#64748B]" />
+              <Input placeholder="搜索法律知识、法规、案例..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pl-10 sm:pl-12 h-10 sm:h-12 text-sm sm:text-base" />
             </div>
           </div>
         </Card>
 
         {/* Category Filter */}
-        <div className="flex gap-3 mb-8 overflow-x-auto pb-2">
-          {categories.map(category => <button key={category.id} onClick={() => setSelectedCategory(category.id)} className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-all ${selectedCategory === category.id ? 'bg-[#1E3A5F] text-white' : 'bg-white text-[#64748B] hover:bg-slate-50'}`}>
+        <div className="flex gap-2 sm:gap-3 mb-4 sm:mb-6 lg:mb-8 overflow-x-auto pb-2 -mx-4 sm:mx-0 px-4 sm:px-0 scrollbar-hide">
+          {categories.map(category => <button key={category.id} onClick={() => setSelectedCategory(category.id)} className={`px-3 sm:px-4 py-2 sm:py-2 rounded-lg font-medium text-xs sm:text-sm whitespace-nowrap transition-all touch-manipulation ${selectedCategory === category.id ? 'bg-[#1E3A5F] text-white' : 'bg-white text-[#64748B] hover:bg-slate-50'}`}>
               {category.name}
             </button>)}
         </div>
 
         {/* Knowledge Grid */}
-        <div className="grid grid-cols-2 gap-6">
-          {filteredItems.map(item => <Card key={item.id} className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
-              <div className="flex items-start justify-between mb-4">
-                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getCategoryColor(item.category)}`}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          {filteredItems.map(item => <Card key={item.id} className="bg-white rounded-xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-shadow">
+              <div className="flex items-start justify-between mb-3 sm:mb-4">
+                <span className={`px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs font-semibold ${getCategoryColor(item.category)}`}>
                   {getCategoryName(item.category)}
                 </span>
-                <BookOpen className="w-5 h-5 text-[#64748B]" />
+                <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-[#64748B] flex-shrink-0" />
               </div>
-              <h3 className="text-lg font-bold font-['Space_Grotesk'] text-[#1E3A5F] mb-3">
+              <h3 className="text-base sm:text-lg font-bold font-['Space_Grotesk'] text-[#1E3A5F] mb-2 sm:mb-3 line-clamp-2">
                 {item.title}
               </h3>
-              <p className="text-sm text-[#64748B] leading-relaxed mb-4">
+              <p className="text-xs sm:text-sm text-[#64748B] leading-relaxed mb-3 sm:mb-4 line-clamp-3">
                 {item.summary}
               </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {item.tags.map(tag => <span key={tag} className="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded">
+              <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3 sm:mb-4">
+                {item.tags.slice(0, 3).map(tag => <span key={tag} className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-slate-100 text-slate-600 text-[10px] sm:text-xs rounded whitespace-nowrap">
                     {tag}
                   </span>)}
+                {item.tags.length > 3 && <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-slate-100 text-slate-600 text-[10px] sm:text-xs rounded">
+                    +{item.tags.length - 3}
+                  </span>}
               </div>
-              <Button variant="outline" className="w-full group" onClick={() => {
+              <Button variant="outline" className="w-full group text-xs sm:text-sm py-2 sm:py-2.5" onClick={() => {
             toast({
               title: item.title,
               description: item.content.substring(0, 100) + '...'
             });
           }}>
                 查看详情
-                <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-1.5 sm:ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Card>)}
         </div>
 
-        {filteredItems.length === 0 && <div className="text-center py-16">
-            <BookOpen className="w-16 h-16 text-[#64748B] mx-auto mb-4" />
-            <p className="text-[#64748B]">未找到相关内容</p>
+        {filteredItems.length === 0 && <div className="text-center py-12 sm:py-16">
+            <BookOpen className="w-12 h-12 sm:w-16 sm:h-16 text-[#64748B] mx-auto mb-3 sm:mb-4" />
+            <p className="text-sm sm:text-base text-[#64748B]">未找到相关内容</p>
           </div>}
       </main>
     </div>;
