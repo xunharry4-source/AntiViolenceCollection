@@ -384,93 +384,101 @@ export default function Assessment(props) {
     });
   };
   const getRiskInfo = (level, answers) => {
+    // 根据用户的具体情况生成个性化建议
     const occupation = answers['occupation']?.value;
     const debtAmount = answers['debt_amount']?.value;
     const paymentAbility = answers['payment_ability']?.value;
     const legalAction = answers['legal_action']?.value;
+    const contactMethod = answers['contact_method']?.value || [];
 
-    // 根据职业生成个性化建议
-    const getOccupationSuggestions = () => {
-      switch (occupation) {
-        case 'employee':
-          return ['关注工资卡冻结风险：如担心工资卡被冻结，可提前与银行沟通，申请更换工资卡账户', '了解公积金提取政策：部分情况下可提取公积金用于偿还债务，咨询当地公积金管理中心', '保护社保和公积金：避免因债务问题影响社保和公积金的正常缴纳', '与单位人事沟通：如担心催收影响工作，可提前与单位人事部门沟通，说明情况'];
-        case 'freelancer':
-          return ['整理收入证明材料：收集近期的收入证明、合同、发票等，用于与债权方协商', '关注税务问题：确保按时申报纳税，避免因债务问题影响税务合规', '维护客户关系：如担心催收影响客户关系，可提前与重要客户沟通', '建立收入多元化：尝试拓展收入来源，提高还款能力'];
-        case 'business':
-          return ['保护经营账户：避免个人债务影响经营账户的正常使用', '关注营业执照风险：如担心营业执照被吊销，咨询当地市场监管部门', '与供应商沟通：如担心催收影响供应商关系，提前沟通说明情况', '考虑经营调整：评估是否需要调整经营策略，提高现金流'];
-        case 'government':
-          return ['关注职业纪律：了解公务员和事业单位人员的纪律规定，避免因债务问题影响职业发展', '提前向组织报告：如担心债务问题影响工作，可提前向组织部门报告', '保护个人声誉：避免催收行为影响个人声誉和职业形象', '寻求组织帮助：如遇到困难，可向组织寻求帮助和支持'];
-        case 'student':
-          return ['关注学业影响：避免债务问题影响学业，如担心可向学校辅导员寻求帮助', '了解家长责任：如债务涉及家长担保，及时与家长沟通，共同应对', '保护征信记录：学生征信记录对未来就业、贷款等有重要影响，务必重视', '寻求学校帮助：如遇到困难，可向学校学生资助中心寻求帮助'];
-        case 'retired':
-          return ['关注养老金保护：了解养老金的法律保护，避免被强制执行', '保护医保权益：确保医保正常缴纳，避免因债务问题影响医疗保障', '与子女沟通：及时与子女沟通债务情况，寻求理解和支持', '了解社会救助：如生活困难，可咨询当地民政部门的社会救助政策'];
-        case 'unemployed':
-          return ['关注就业影响：避免债务问题影响就业，如担心可向就业服务机构寻求帮助', '了解低保政策：如生活困难，可咨询当地民政部门的低保政策', '参加职业培训：积极参加职业培训，提高就业能力', '寻求社会救助：如遇到困难，可向当地民政部门寻求社会救助'];
-        default:
-          return ['保持积极心态：债务问题可以解决，保持积极心态，积极应对', '寻求专业帮助：如遇到困难，可寻求专业机构或个人的帮助', '制定还款计划：根据实际情况，制定切实可行的还款计划', '避免新增债务：在还清现有债务前，避免申请新的贷款'];
-      }
+    // 生成职业相关建议
+    const getOccupationSuggestions = occ => {
+      const suggestions = {
+        employee: ['保持工作稳定性：避免因债务问题影响工作，这是还款的重要保障', '合理利用公积金：如有公积金贷款，可咨询是否可以提取公积金还款', '关注社保公积金：确保社保公积金正常缴纳，避免断缴影响未来福利', '与家人沟通：与配偶或家人坦诚沟通债务情况，寻求家庭支持'],
+        freelancer: ['稳定收入来源：尽量保持稳定的客户和收入，避免收入波动影响还款', '做好税务规划：合理规划税务，避免因税务问题加重债务负担', '维护客户关系：保持良好的客户关系，避免债务问题影响业务', '建立应急基金：自由职业者收入不稳定，建议建立3-6个月的应急基金'],
+        business: ['保护经营现金流：优先保障经营现金流，避免因还款影响正常经营', '与供应商协商：与供应商协商延长付款周期，缓解资金压力', '考虑资产变现：如有闲置资产，可考虑变现偿还部分债务', '寻求政府支持：了解当地政府对小微企业的扶持政策，申请相关支持'],
+        government: ['关注职业影响：公务员和事业单位人员需注意债务问题可能影响政审和晋升', '遵守纪律规定：了解单位关于个人债务的相关规定，避免违规', '寻求组织帮助：如债务问题严重，可向组织说明情况，寻求帮助', '保持良好形象：避免债务问题影响个人和单位形象'],
+        student: ['与家长沟通：如实告知家长债务情况，寻求家庭支持和帮助', '关注学业影响：避免债务问题影响学业，必要时可申请休学或缓考', '了解助学贷款：如有助学贷款，了解相关政策和还款优惠', '寻求学校帮助：可向学校心理咨询中心或学生资助中心寻求帮助'],
+        retired: ['关注养老金：确保养老金正常领取，这是还款的重要来源', '利用医疗保障：合理利用医疗保障，减少医疗支出', '与子女沟通：与子女坦诚沟通债务情况，寻求家庭支持', '了解社会救助：如经济困难，可了解当地的社会救助政策'],
+        unemployed: ['积极寻找工作：将就业作为首要任务，稳定的收入是还款的基础', '申请社会救助：了解并申请当地的社会救助和失业保险', '参加技能培训：参加政府或社会组织提供的免费技能培训，提升就业能力', '寻求亲友帮助：向亲友说明情况，寻求临时经济支持'],
+        other: ['保持积极心态：债务问题可以解决，保持积极乐观的心态', '制定详细计划：根据自身情况制定详细的还款计划', '寻求专业帮助：如有需要，可寻求专业的债务咨询或法律帮助', '避免新增债务：在还清现有债务前，避免新增任何债务']
+      };
+      return suggestions[occ] || suggestions['other'];
     };
 
-    // 根据负债金额生成个性化建议
-    const getDebtAmountSuggestions = () => {
-      switch (debtAmount) {
-        case 'small':
-          return ['小额债务快速偿还：通过兼职、节省开支等方式，争取在3-6个月内还清', '避免利息累积：小额债务利息相对较低，但也要避免长期拖欠', '建立应急基金：还清债务后，建立应急基金，避免再次陷入债务', '学习理财知识：通过书籍、课程等途径提升理财能力'];
-        case 'medium':
-          return ['制定长期还款计划：制定1-2年的还款计划，确保每月按时还款', '考虑债务整合：如有多笔债务，可考虑债务整合贷款，降低利息负担', '增加收入来源：通过兼职、副业等方式增加收入，提高还款能力', '控制支出：严格控制非必要支出，将更多资金用于偿还债务'];
-        case 'large':
-          return ['寻求专业债务咨询：咨询专业的债务管理机构或律师，了解债务重组方案', '评估资产处置：如有多余资产，可考虑处置部分资产偿还债务', '与债权方协商：主动与债权方协商，争取延期还款、减免利息等优惠', '考虑债务重组：如债务确实难以偿还，可考虑债务重组或债务减免'];
-        case 'huge':
-          return ['立即咨询专业律师：寻找擅长债务纠纷的律师，了解法律程序和维权途径', '评估破产可能性：如债务确实无法偿还，可咨询律师了解个人破产的法律程序', '保护核心资产：确保基本生活资产不被执行，如唯一住房等', '与家人坦诚沟通：与家人坦诚沟通债务情况，共同应对'];
-        default:
-          return [];
-      }
+    // 生成负债金额相关建议
+    const getDebtAmountSuggestions = amount => {
+      const suggestions = {
+        small: ['小额债务易解决：5万以下的债务相对容易解决，保持信心', '优先偿还高利率债务：优先偿还信用卡等高利率债务', '考虑一次性还清：如有可能，考虑一次性还清部分债务', '避免逾期：小额债务更要避免逾期，影响征信'],
+        medium: ['制定分期计划：5-20万的债务需要制定详细的分期还款计划', '评估债务整合：可考虑债务整合贷款，降低利息负担', '增加收入来源：考虑兼职或副业，增加收入用于还款', '与债权方协商：主动与债权方协商，争取更优惠的还款条件'],
+        large: ['寻求专业帮助：20-50万的债务建议寻求专业的债务咨询或律师帮助', '考虑资产处置：如有闲置资产，可考虑处置部分资产偿还债务', '制定长期计划：制定3-5年的长期还款计划，保持耐心', '避免冲动决策：不要因债务压力做出冲动的决策'],
+        huge: ['咨询破产律师：50万以上的巨额债务，可咨询律师了解个人破产的法律程序', '保护核心资产：确保住房、养老金等核心资产不受影响', '与家人共同面对：巨额债务需要家人共同面对和支持', '做好长期准备：巨额债务的解决需要较长时间，做好长期准备']
+      };
+      return suggestions[amount] || suggestions['medium'];
     };
 
-    // 根据还款能力生成个性化建议
-    const getPaymentAbilitySuggestions = () => {
-      switch (paymentAbility) {
-        case 'good':
-          return ['保持良好还款记录：按时还款，维护良好的征信记录', '提前还款：如有余力，可考虑提前还款，减少利息支出', '避免新增债务：在还清现有债务前，避免申请新的贷款或信用卡', '建立应急基金：每月预留收入的5-10%作为应急资金'];
-        case 'partial':
-          return ['与债权方协商分期还款：主动与债权方协商，争取分期还款方案', '制定详细还款计划：根据收入情况，制定详细的月度还款计划', '优先偿还高利率债务：按照利率高低确定还款优先顺序', '增加收入来源：通过兼职、副业等方式增加收入，提高还款能力'];
-        case 'difficult':
-          return ['寻求债务重组：主动与债权方协商，争取债务重组或延期还款', '了解法律保护：学习相关法律法规，了解自己的合法权益和维权途径', '避免违法催收：如遇违法催收，及时向监管部门投诉', '寻求专业帮助：咨询专业的债务管理机构或律师，了解应对方案'];
-        default:
-          return [];
-      }
+    // 生成还款能力相关建议
+    const getPaymentAbilitySuggestions = ability => {
+      const suggestions = {
+        good: ['保持良好习惯：继续保持按时还款的良好习惯', '提前还款：如有余力，可考虑提前还款，减少利息支出', '优化债务结构：评估是否可以整合债务，降低整体利息', '建立信用：通过按时还款，逐步建立良好的信用记录'],
+        partial: ['协商分期还款：与债权方协商，制定可行的分期还款计划', '优先偿还高利率债务：优先偿还信用卡等高利率债务', '增加收入来源：考虑兼职或副业，增加收入用于还款', '控制支出：严格控制非必要支出，将更多资金用于还款'],
+        difficult: ['主动说明情况：主动联系债权方，说明暂时无法还款的原因', '申请延期还款：申请延期还款或减免利息', '寻求债务重组：可寻求专业的债务重组服务', '避免失联：即使无法还款，也要保持联系，避免失联']
+      };
+      return suggestions[ability] || suggestions['difficult'];
     };
 
-    // 根据法律行动生成个性化建议
-    const getLegalActionSuggestions = () => {
-      switch (legalAction) {
-        case 'no':
-          return ['预防性措施：保持与债权方的正常沟通，避免失联', '了解法律程序：提前了解相关法律程序，做好应对准备', '保留所有证据：保存所有沟通记录、催收短信、通话录音等', '避免激化矛盾：保持冷静，避免与债权方发生冲突'];
-        case 'notice':
-          return ['认真阅读律师函：仔细阅读律师函内容，了解对方诉求', '核实律师函真实性：可联系律师事务所确认律师函的真实性', '咨询专业律师：如有疑问，咨询专业律师，了解应对方案', '准备相关材料：准备借款合同、还款记录等相关材料'];
-        case 'sued':
-          return ['积极应诉：在法定期限内提交答辩状，积极应诉', '准备答辩材料：准备答辩状、证据清单等应诉材料', '寻求法律援助：如经济困难，可申请法律援助', '了解法律程序：了解诉讼程序，做好应对准备'];
-        default:
-          return [];
-      }
+    // 生成法律行动相关建议
+    const getLegalActionSuggestions = action => {
+      const suggestions = {
+        no: ['预防为主：目前未收到法律文书，以预防为主', '保持沟通：保持与债权方的正常沟通，避免事态升级', '了解法律知识：学习相关法律知识，了解自己的权利', '保留证据：保留所有沟通记录，以备不时之需'],
+        notice: ['认真对待律师函：律师函是法律行动的前奏，需要认真对待', '核实律师函真实性：联系律师事务所确认律师函的真实性', '咨询专业律师：如有疑问，咨询专业律师了解应对方法', '准备应诉材料：提前准备相关证据和材料，以备应诉'],
+        sued: ['立即咨询律师：已被起诉，立即咨询专业律师', '准备答辩状：在法定期限内提交答辩状，维护自身权益', '收集证据：收集所有相关证据，包括借款合同、还款记录等', '积极应诉：积极应诉，不要缺席庭审']
+      };
+      return suggestions[action] || suggestions['no'];
     };
 
-    // 通用建议
-    const getCommonSuggestions = () => {
-      switch (level) {
-        case 'low':
-          return ['保持与债权方的正常沟通：定期主动联系债权方，说明还款意愿和计划', '保留所有沟通记录：保存通话录音、短信、邮件等沟通记录'];
-        case 'medium':
-          return ['注意保留所有证据：保存所有沟通记录、催收短信、通话录音等', '了解法律保护：学习相关法律法规，了解自己的合法权益'];
-        case 'high':
-          return ['收集和保存所有相关证据：包括借款合同、还款记录、催收短信等', '了解法律程序和您的权利：学习民法典、个人信息保护法等相关法律'];
-        default:
-          return [];
+    // 生成催收方式相关建议
+    const getContactMethodSuggestions = methods => {
+      const suggestions = [];
+
+      // 检查是否有违法催收方式
+      const illegalMethods = methods.filter(m => {
+        const option = questions.find(q => q.id === 'contact_method').options.find(o => o.value === m);
+        return option && option.illegal;
+      });
+      if (illegalMethods.length > 0) {
+        suggestions.push('检测到违法催收行为：您遭遇了违法催收，请立即采取维权措施');
+        suggestions.push('收集违法证据：保留所有违法催收的证据，包括录音、短信、聊天记录');
+        suggestions.push('向监管部门投诉：向银保监会、公安机关等监管部门投诉违法催收行为');
+        suggestions.push('咨询专业律师：如违法催收造成严重后果，咨询专业律师了解维权途径');
+      } else {
+        suggestions.push('催收方式合法：目前催收方式相对合法，保持正常沟通');
+        suggestions.push('保持冷静：面对催收保持冷静，不要情绪化回应');
+        suggestions.push('记录沟通内容：记录每次沟通的时间、内容和对方身份');
       }
+
+      // 检查是否有高频电话轰炸
+      if (methods.includes('high_frequency')) {
+        suggestions.push('高频电话骚扰：遭遇高频电话轰炸，可向公安机关报案');
+      }
+
+      // 检查是否有上门催收
+      if (methods.includes('visit')) {
+        suggestions.push('上门催收风险：上门催收可能侵犯隐私权，可报警处理');
+      }
+
+      // 检查是否有威胁恐吓
+      if (methods.includes('threat')) {
+        suggestions.push('威胁恐吓严重：威胁恐吓可能构成犯罪，立即向公安机关报案');
+      }
+      return suggestions;
     };
 
-    // 合并所有建议
-    const allSuggestions = [...getOccupationSuggestions(), ...getDebtAmountSuggestions(), ...getPaymentAbilitySuggestions(), ...getLegalActionSuggestions(), ...getCommonSuggestions()];
+    // 合并所有个性化建议
+    const allSuggestions = [...getOccupationSuggestions(occupation), ...getDebtAmountSuggestions(debtAmount), ...getPaymentAbilitySuggestions(paymentAbility), ...getLegalActionSuggestions(legalAction), ...getContactMethodSuggestions(contactMethod)];
+
+    // 去重并限制建议数量
+    const uniqueSuggestions = [...new Set(allSuggestions)].slice(0, 12);
     switch (level) {
       case 'low':
         return {
@@ -478,7 +486,7 @@ export default function Assessment(props) {
           icon: CheckCircle,
           title: '低风险',
           description: '当前风险较低，建议保持沟通，按时还款',
-          suggestions: allSuggestions
+          suggestions: uniqueSuggestions
         };
       case 'medium':
         return {
@@ -486,7 +494,7 @@ export default function Assessment(props) {
           icon: AlertTriangle,
           title: '中等风险',
           description: '存在一定风险，建议主动协商，制定应对方案',
-          suggestions: allSuggestions
+          suggestions: uniqueSuggestions
         };
       case 'high':
         return {
@@ -494,7 +502,7 @@ export default function Assessment(props) {
           icon: XCircle,
           title: '高风险',
           description: '风险较高，建议寻求专业法律帮助，谨慎应对',
-          suggestions: allSuggestions
+          suggestions: uniqueSuggestions
         };
       default:
         return null;
