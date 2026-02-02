@@ -464,7 +464,7 @@ export default function Assessment(props) {
     const debtAmount = answers['debt_amount']?.value;
     const paymentAbility = answers['payment_ability']?.value;
     const legalAction = answers['legal_action']?.value;
-    const contactMethod = answers['contact_method']?.value || [];
+    const contactMethod = Array.isArray(answers['contact_method']?.value) ? answers['contact_method'].value : [];
 
     // 生成职业相关建议
     const getOccupationSuggestions = occ => {
@@ -516,9 +516,26 @@ export default function Assessment(props) {
     const getContactMethodSuggestions = methods => {
       const suggestions = [];
 
+      // 确保 methods 是数组
+      if (!Array.isArray(methods)) {
+        suggestions.push('催收方式信息缺失：无法获取催收方式信息');
+        return suggestions;
+      }
+
+      // 确保 questions 数组存在且包含 contact_method 问题
+      if (!questions || !Array.isArray(questions)) {
+        suggestions.push('催收方式信息缺失：无法获取催收方式信息');
+        return suggestions;
+      }
+      const contactQuestion = questions.find(q => q && q.id === 'contact_method');
+      if (!contactQuestion || !contactQuestion.options || !Array.isArray(contactQuestion.options)) {
+        suggestions.push('催收方式信息缺失：无法获取催收方式信息');
+        return suggestions;
+      }
+
       // 检查是否有违法催收方式
       const illegalMethods = methods.filter(m => {
-        const option = questions.find(q => q.id === 'contact_method').options.find(o => o.value === m);
+        const option = contactQuestion.options.find(o => o && o.value === m);
         return option && option.illegal;
       });
       if (illegalMethods.length > 0) {
@@ -696,6 +713,12 @@ export default function Assessment(props) {
               }
             }
             const RiskIcon = riskInfo.icon;
+
+            // 确保 riskLevel 是有效的，否则使用默认值
+            const safeRiskLevel = riskLevel && typeof riskLevel.totalRisk === 'number' && typeof riskLevel.percentage === 'number' ? riskLevel : {
+              totalRisk: 0,
+              percentage: 0
+            };
             return <>
                     <div className="text-center mb-6 md:mb-8">
                       <div className="w-16 h-16 md:w-24 md:h-24 rounded-full mx-auto mb-3 md:mb-4 flex items-center justify-center" style={{
@@ -718,12 +741,12 @@ export default function Assessment(props) {
                       <div className="flex justify-between items-center mb-2">
                         <span className="text-xs md:text-sm text-[#64748B]">风险评分</span>
                         <span className="text-xl md:text-2xl font-bold font-['Space_Grotesk'] text-[#1E3A5F]">
-                          {riskLevel.totalRisk} / {questions.length * 3}
+                          {safeRiskLevel.totalRisk} / {questions.length * 3}
                         </span>
                       </div>
                       <div className="h-3 bg-slate-200 rounded-full overflow-hidden">
                         <div className="h-full transition-all duration-1000" style={{
-                    width: `${riskLevel.percentage}%`,
+                    width: `${safeRiskLevel.percentage}%`,
                     backgroundColor: riskInfo.color
                   }}></div>
                       </div>
@@ -751,7 +774,7 @@ export default function Assessment(props) {
                     </div>
 
                     {/* Legal Warning - 如果有违法行为 */}
-                    {riskLevel.illegalBehaviors && riskLevel.illegalBehaviors.length > 0 && <div className="mb-6 md:mb-8 bg-red-50 border-2 border-red-200 rounded-xl p-4 md:p-6">
+                    {riskLevel && riskLevel.illegalBehaviors && riskLevel.illegalBehaviors.length > 0 && <div className="mb-6 md:mb-8 bg-red-50 border-2 border-red-200 rounded-xl p-4 md:p-6">
                         <div className="flex items-start gap-2 md:gap-3 mb-3 md:mb-4">
                           <Scale className="w-5 h-5 md:w-6 md:h-6 text-red-600 flex-shrink-0 mt-1" />
                           <div className="flex-1">
@@ -818,7 +841,7 @@ export default function Assessment(props) {
                       <Button onClick={() => navigateTo({
                   pageId: 'solutions',
                   params: {
-                    riskLevel: riskLevel.level
+                    riskLevel: riskLevel ? riskLevel.level : 'low'
                   }
                 })} className="flex-1 bg-[#1E3A5F] hover:bg-[#0F2744] text-xs md:text-sm">
                         查看应对方案
