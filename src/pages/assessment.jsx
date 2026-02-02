@@ -1,7 +1,7 @@
 // @ts-ignore;
 import React, { useState } from 'react';
 // @ts-ignore;
-import { ArrowLeft, AlertTriangle, Shield, CheckCircle, XCircle, ChevronRight, Plus, Scale, FileText } from 'lucide-react';
+import { ArrowLeft, AlertTriangle, Shield, CheckCircle, XCircle, ChevronRight, Plus, Scale, FileText, AlertCircle, Info } from 'lucide-react';
 // @ts-ignore;
 import { useToast, Button, Card, Input } from '@/components/ui';
 
@@ -624,6 +624,56 @@ export default function Assessment(props) {
                           </ul>
                         </div>
                       </div>}
+
+                    {/* Risk Warning Card - 债务清算/协商代理风险提示 */}
+                    <div className="mb-8 bg-amber-50 border-2 border-amber-200 rounded-xl p-6">
+                      <div className="flex items-start gap-3 mb-4">
+                        <AlertCircle className="w-6 h-6 text-amber-600 flex-shrink-0 mt-1" />
+                        <div className="flex-1">
+                          <h3 className="text-lg font-bold font-['Space_Grotesk'] text-amber-700 mb-2">
+                            风险提示｜关于"债务清算/债务协商代理"的常见风险
+                          </h3>
+                          <p className="text-sm text-amber-600 mb-4">
+                            请注意：目前市场上存在以"债务清算""债务优化""停息挂账代理"等名义提供服务的机构或个人，其中部分存在较高风险。
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* 常见风险信号 */}
+                      <div className="mb-4">
+                        <div className="flex items-center gap-2 mb-3">
+                          <AlertTriangle className="w-4 h-4 text-amber-600" />
+                          <h4 className="text-sm font-bold text-amber-700">常见风险信号包括：</h4>
+                        </div>
+                        <ul className="space-y-2">
+                          {['要求提前支付服务费、保证金', '承诺"包成功""内部渠道""无需本人参与"', '要求提供身份证、银行卡、验证码等敏感信息', '要求通过个人账户或非官方渠道转账'].map((item, index) => <li key={index} className="flex items-start gap-2 text-sm text-amber-600">
+                              <span className="text-amber-500 mt-1">•</span>
+                              <span>{item}</span>
+                            </li>)}
+                        </ul>
+                      </div>
+
+                      {/* 建议 */}
+                      <div className="mb-4">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Info className="w-4 h-4 text-blue-600" />
+                          <h4 className="text-sm font-bold text-blue-700">建议：</h4>
+                        </div>
+                        <ul className="space-y-2">
+                          {['优先通过原债权机构的官方渠道了解协商政策', '谨慎对待第三方代理或中介服务'].map((item, index) => <li key={index} className="flex items-start gap-2 text-sm text-blue-600">
+                              <span className="text-blue-500 mt-1">•</span>
+                              <span>{item}</span>
+                            </li>)}
+                        </ul>
+                      </div>
+
+                      {/* 声明 */}
+                      <div className="mt-4 pt-4 border-t border-amber-200">
+                        <p className="text-xs text-amber-700 font-medium text-center">
+                          ⚠️ 本产品不提供代理服务，也不收取协商相关费用
+                        </p>
+                      </div>
+                    </div>
 
                     {/* Action Buttons */}
                     <div className="flex gap-4">
