@@ -18,27 +18,9 @@ export default function Assessment(props) {
   const [riskLevel, setRiskLevel] = useState(null);
   const [otherContactMethod, setOtherContactMethod] = useState('');
   const questions = [{
-    id: 'contact_frequency',
-    title: '催收联系频率',
-    description: '催收方联系您的频率如何？',
-    options: [{
-      value: 'low',
-      label: '偶尔（每周1-2次）',
-      risk: 1
-    }, {
-      value: 'medium',
-      label: '频繁（每天1-2次）',
-      risk: 2
-    }, {
-      value: 'high',
-      label: '非常频繁（每天3次以上）',
-      risk: 3
-    }]
-  }, {
     id: 'occupation',
     title: '职业',
     description: '请选择您的职业类型',
-    multiSelect: false,
     options: [{
       value: 'employee',
       label: '企业员工',
@@ -48,7 +30,7 @@ export default function Assessment(props) {
       label: '自由职业者',
       risk: 2
     }, {
-      value: 'self_employed',
+      value: 'business',
       label: '个体工商户',
       risk: 2
     }, {
@@ -71,6 +53,133 @@ export default function Assessment(props) {
       value: 'other',
       label: '其他',
       risk: 2
+    }]
+  }, {
+    id: 'contact_method',
+    title: '催收方式',
+    description: '催收方主要通过什么方式联系您？（可多选）',
+    multiSelect: true,
+    options: [{
+      value: 'phone',
+      label: '电话',
+      risk: 1,
+      illegal: false
+    }, {
+      value: 'sms',
+      label: '短信',
+      risk: 1,
+      illegal: false
+    }, {
+      value: 'visit',
+      label: '上门',
+      risk: 3,
+      illegal: true,
+      law: '《民法典》第1032条：自然人享有隐私权。任何组织或者个人不得以刺探、侵扰、泄露、公开等方式侵害他人的隐私权。',
+      lawDetail: '未经同意上门催收可能构成非法侵入住宅或侵犯隐私权',
+      handlingMethod: '1. 明确拒绝上门催收，要求通过电话或书面方式沟通\n2. 如对方坚持上门，可报警处理\n3. 保留对方上门的证据（录音、录像）\n4. 向监管部门投诉其违规行为'
+    }, {
+      value: 'sued',
+      label: '起诉',
+      risk: 3,
+      illegal: false
+    }, {
+      value: 'lawyer_letter',
+      label: '律师函',
+      risk: 2,
+      illegal: false
+    }, {
+      value: 'emergency_contact',
+      label: '打紧急联系人电话',
+      risk: 3,
+      illegal: true,
+      law: '《个人信息保护法》第6条：处理个人信息应当具有明确、合理的目的，应当与处理目的直接相关，采取对个人权益影响最小的方式。',
+      lawDetail: '未经授权联系紧急联系人属于侵犯个人信息权益',
+      handlingMethod: '1. 明确告知对方未经授权联系紧急联系人违法\n2. 要求对方立即停止联系紧急联系人\n3. 保留通话记录和短信截图作为证据\n4. 向银保监会等监管部门投诉\n5. 如造成严重后果，可向法院起诉'
+    }, {
+      value: 'wechat_private',
+      label: '强烈要求加微信/私下沟通',
+      risk: 2,
+      illegal: true,
+      law: '《互联网金融逾期债务催收自律公约》第18条：催收人员不得诱导或逼迫债务人通过违法违规途径筹集资金。',
+      lawDetail: '要求私下沟通可能涉及不当要求或诱导违规行为',
+      handlingMethod: '1. 拒绝添加微信，坚持通过官方渠道沟通\n2. 保留对方要求私下沟通的聊天记录\n3. 警惕对方可能提出的不当要求\n4. 如对方持续骚扰，可向监管部门投诉'
+    }, {
+      value: 'non_working_hours',
+      label: '非工时间联系',
+      risk: 2,
+      illegal: true,
+      law: '《互联网金融逾期债务催收自律公约》第16条：催收人员应在每日8:00-22:00进行催收，不得在非工作时间进行催收。',
+      lawDetail: '非工作时间（晚22:00-早8:00）催收违反行业自律规范',
+      handlingMethod: '1. 明确告知对方非工作时间联系违规\n2. 要求对方只在工作时间联系\n3. 保留非工作时间联系的通话记录\n4. 向监管部门投诉其违规行为'
+    }, {
+      value: 'auto_robot',
+      label: '自动语音与机器人外呼',
+      risk: 2,
+      illegal: true,
+      law: '《个人信息保护法》第24条：通过自动化决策方式向个人进行信息推送、营销，应当提供不针对其个人特征的选项或提供便捷的拒绝方式。',
+      lawDetail: '未经同意的自动外呼可能侵犯个人信息权益',
+      handlingMethod: '1. 明确拒绝自动外呼，要求人工客服沟通\n2. 保留自动外呼的录音证据\n3. 向运营商投诉骚扰电话\n4. 向监管部门投诉其违规使用自动化催收'
+    }, {
+      value: 'high_frequency',
+      label: '高频电话轰炸',
+      risk: 3,
+      illegal: true,
+      law: '《治安管理处罚法》第42条：多次发送淫秽、侮辱、恐吓或者其他信息，干扰他人正常生活的，处五日以下拘留或者五百元以下罚款。',
+      lawDetail: '高频骚扰电话可能构成违法行为',
+      handlingMethod: '1. 保留所有骚扰电话的通话记录和录音\n2. 明确告知对方停止骚扰行为\n3. 向公安机关报案，依据《治安管理处罚法》第42条\n4. 向监管部门投诉\n5. 如造成严重精神损害，可向法院起诉索赔'
+    }, {
+      value: 'third_party',
+      label: '第三方（亲友、单位）',
+      risk: 3,
+      illegal: true,
+      law: '《个人信息保护法》第6条：处理个人信息应当具有明确、合理的目的，应当与处理目的直接相关。',
+      lawDetail: '未经授权向第三方泄露债务信息属于侵犯个人信息权益',
+      handlingMethod: '1. 明确告知对方未经授权向第三方泄露信息违法\n2. 要求对方立即停止联系第三方\n3. 保留对方联系第三方的证据\n4. 向监管部门投诉其侵犯个人信息\n5. 如造成名誉损害，可向法院起诉'
+    }, {
+      value: 'threat',
+      label: '威胁或恐吓',
+      risk: 3,
+      illegal: true,
+      law: '《刑法》第293条：有下列寻衅滋事行为之一，破坏社会秩序的，处五年以下有期徒刑、拘役或者管制：（二）追逐、拦截、辱骂、恐吓他人。',
+      lawDetail: '威胁或恐吓可能构成寻衅滋事罪或其他违法犯罪行为',
+      handlingMethod: '1. 立即保留威胁或恐吓的证据（录音、短信、聊天记录）\n2. 立即向公安机关报案，可能构成寻衅滋事罪\n3. 向监管部门投诉\n4. 咨询专业律师，了解刑事和民事维权途径\n5. 如人身安全受到威胁，立即报警并寻求保护'
+    }, {
+      value: 'fake_police',
+      label: '冒充公检法',
+      risk: 3,
+      illegal: true,
+      law: '《刑法》第279条：冒充国家机关工作人员招摇撞骗的，处三年以下有期徒刑、拘役、管制或者剥夺政治权利；情节严重的，处三年以上十年以下有期徒刑。',
+      lawDetail: '冒充公安、检察院、法院等国家机关工作人员进行催收属于严重违法犯罪行为',
+      handlingMethod: '1. 立即保留对方冒充公检法的证据（录音、短信、聊天记录）\n2. 立即向公安机关报案，可能构成招摇撞骗罪\n3. 向银保监会等监管部门投诉\n4. 咨询专业律师，了解刑事和民事维权途径\n5. 不要向对方转账或提供任何个人信息'
+    }, {
+      value: 'unofficial_payment',
+      label: '非官方收款',
+      risk: 3,
+      illegal: true,
+      law: '《刑法》第266条：诈骗公私财物，数额较大的，处三年以下有期徒刑、拘役或者管制，并处或者单处罚金。',
+      lawDetail: '要求向非官方账户还款可能构成诈骗或非法集资',
+      handlingMethod: '1. 立即停止向非官方账户转账\n2. 保留对方要求非官方收款的证据\n3. 向公安机关报案，可能构成诈骗罪\n4. 向监管部门投诉\n5. 只通过官方渠道还款'
+    }, {
+      value: 'third_party_outsource',
+      label: '第三方外包催促',
+      risk: 3,
+      illegal: true,
+      law: '《个人信息保护法》第21条：个人信息处理者委托处理个人信息的，应当与受托人约定委托处理的目的、期限、处理方式、个人信息的种类、保护措施以及双方的权利和义务。',
+      lawDetail: '未经授权将债务信息外包给第三方催收可能侵犯个人信息权益',
+      handlingMethod: '1. 明确告知对方未经授权外包催收违法\n2. 要求对方停止第三方催收行为\n3. 保留第三方催收的证据\n4. 向监管部门投诉其违规外包\n5. 如造成名誉损害，可向法院起诉'
+    }, {
+      value: 'frequent_change',
+      label: '频繁更换号码/平台',
+      risk: 3,
+      illegal: true,
+      law: '《互联网金融逾期债务催收自律公约》第14条：催收人员不得频繁更换联系方式或平台进行骚扰。',
+      lawDetail: '频繁更换号码或平台进行催收属于逃避监管和持续骚扰行为',
+      handlingMethod: '1. 保留所有不同号码和平台的催收记录\n2. 明确告知对方频繁更换联系方式违规\n3. 向监管部门投诉其逃避监管行为\n4. 如造成严重骚扰，可向公安机关报案\n5. 咨询律师，了解维权途径'
+    }, {
+      value: 'other',
+      label: '其他',
+      risk: 2,
+      illegal: false
     }]
   }, {
     id: 'debt_amount',
@@ -129,14 +238,54 @@ export default function Assessment(props) {
     }]
   }];
   const handleAnswer = (questionId, value, risk) => {
-    // 职业问题改为单选
-    setAnswers(prev => ({
-      ...prev,
-      [questionId]: {
-        value,
-        risk
-      }
-    }));
+    // 对于催收方式问题，支持多选
+    if (questionId === 'contact_method') {
+      setAnswers(prev => {
+        const currentAnswer = prev[questionId] || {
+          value: [],
+          risk: 0
+        };
+        const selectedValues = Array.isArray(currentAnswer.value) ? currentAnswer.value : [currentAnswer.value];
+        if (selectedValues.includes(value)) {
+          // 取消选择
+          const newValues = selectedValues.filter(v => v !== value);
+          const newRisk = newValues.length > 0 ? Math.max(...newValues.map(v => {
+            const option = questions.find(q => q.id === questionId).options.find(o => o.value === v);
+            return option ? option.risk : 0;
+          })) : 0;
+          return {
+            ...prev,
+            [questionId]: {
+              value: newValues,
+              risk: newRisk
+            }
+          };
+        } else {
+          // 添加选择
+          const newValues = [...selectedValues, value];
+          const newRisk = Math.max(...newValues.map(v => {
+            const option = questions.find(q => q.id === questionId).options.find(o => o.value === v);
+            return option ? option.risk : 0;
+          }));
+          return {
+            ...prev,
+            [questionId]: {
+              value: newValues,
+              risk: newRisk
+            }
+          };
+        }
+      });
+    } else {
+      // 其他问题保持单选
+      setAnswers(prev => ({
+        ...prev,
+        [questionId]: {
+          value,
+          risk
+        }
+      }));
+    }
   };
   const handleNext = () => {
     const currentQuestion = questions[currentStep];
@@ -151,13 +300,24 @@ export default function Assessment(props) {
       return;
     }
 
-    // 如果选择了"其他"，检查是否填写了具体内容
-    if (currentQuestion.id === 'occupation' && currentAnswer.value === 'other' && !otherContactMethod.trim()) {
-      toast({
-        title: '请填写其他职业的具体内容',
-        variant: 'destructive'
-      });
-      return;
+    // 对于多选问题，检查是否至少选择了一个选项
+    if (currentQuestion.id === 'contact_method') {
+      const selectedValues = Array.isArray(currentAnswer.value) ? currentAnswer.value : [currentAnswer.value];
+      if (selectedValues.length === 0) {
+        toast({
+          title: '请至少选择一个选项',
+          variant: 'destructive'
+        });
+        return;
+      }
+      // 如果选择了"其他"，检查是否填写了具体内容
+      if (selectedValues.includes('other') && !otherContactMethod.trim()) {
+        toast({
+          title: '请填写其他催收方式的具体内容',
+          variant: 'destructive'
+        });
+        return;
+      }
     }
     if (currentStep < questions.length - 1) {
       setCurrentStep(prev => prev + 1);
@@ -183,8 +343,23 @@ export default function Assessment(props) {
       level = 'high';
     }
 
-    // 检查违法的催收方式（职业问题不涉及违法行为）
+    // 检查违法的催收方式
     const illegalBehaviors = [];
+    const contactMethodAnswer = answers['contact_method'];
+    if (contactMethodAnswer && Array.isArray(contactMethodAnswer.value)) {
+      const contactMethodQuestion = questions.find(q => q.id === 'contact_method');
+      contactMethodAnswer.value.forEach(value => {
+        const option = contactMethodQuestion.options.find(o => o.value === value);
+        if (option && option.illegal) {
+          illegalBehaviors.push({
+            label: option.label,
+            law: option.law,
+            lawDetail: option.lawDetail,
+            handlingMethod: option.handlingMethod
+          });
+        }
+      });
+    }
 
     // 保存评估结果到数据模型
     try {
@@ -193,12 +368,12 @@ export default function Assessment(props) {
         methodName: 'wedaCreateV2',
         params: {
           data: {
-            contact_frequency: answers['contact_frequency']?.value || '',
             occupation: answers['occupation']?.value || '',
+            contact_method: Array.isArray(answers['contact_method']?.value) ? answers['contact_method'].value : [],
             debt_amount: answers['debt_amount']?.value || '',
             payment_ability: answers['payment_ability']?.value || '',
             legal_action: answers['legal_action']?.value || '',
-            other_occupation: otherContactMethod || '',
+            other_contact_method: otherContactMethod || '',
             risk_level: level,
             risk_percentage: Math.round(riskPercentage),
             total_risk: totalRisk,
@@ -306,7 +481,14 @@ export default function Assessment(props) {
               <div className="space-y-4">
                 {questions[currentStep].options.map(option => {
               const currentAnswer = answers[questions[currentStep].id];
-              const isSelected = currentAnswer?.value === option.value;
+              const isMultiSelect = questions[currentStep].id === 'contact_method';
+              let isSelected;
+              if (isMultiSelect) {
+                const selectedValues = Array.isArray(currentAnswer?.value) ? currentAnswer.value : currentAnswer?.value ? [currentAnswer.value] : [];
+                isSelected = selectedValues.includes(option.value);
+              } else {
+                isSelected = currentAnswer?.value === option.value;
+              }
               return <button key={option.value} onClick={() => handleAnswer(questions[currentStep].id, option.value, option.risk)} className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-300 ${isSelected ? 'border-[#1E3A5F] bg-[#1E3A5F]/5' : 'border-slate-200 hover:border-[#1E3A5F]/30 hover:bg-slate-50'}`}>
                       <div className="flex items-center justify-between">
                         <span className="font-medium text-[#1E3A5F]">{option.label}</span>
@@ -316,13 +498,20 @@ export default function Assessment(props) {
             })}
               </div>
 
-              {/* 其他职业输入框 */}
-              {questions[currentStep].id === 'occupation' && currentAnswer?.value === 'other' && <div className="mt-4 p-4 bg-slate-50 rounded-xl border-2 border-[#1E3A5F]/20">
+              {/* 其他催收方式输入框 */}
+              {questions[currentStep].id === 'contact_method' && (() => {
+            const currentAnswer = answers['contact_method'];
+            const selectedValues = Array.isArray(currentAnswer?.value) ? currentAnswer.value : currentAnswer?.value ? [currentAnswer.value] : [];
+            if (selectedValues.includes('other')) {
+              return <div className="mt-4 p-4 bg-slate-50 rounded-xl border-2 border-[#1E3A5F]/20">
                       <label className="block text-sm font-medium text-[#1E3A5F] mb-2">
-                        请具体说明您的职业
+                        请具体说明其他催收方式
                       </label>
-                      <Input value={otherContactMethod} onChange={e => setOtherContactMethod(e.target.value)} placeholder="例如：兼职、家庭主妇等" className="w-full" />
-                    </div>}
+                      <Input value={otherContactMethod} onChange={e => setOtherContactMethod(e.target.value)} placeholder="例如：通过社交媒体联系、发送邮件等" className="w-full" />
+                    </div>;
+            }
+            return null;
+          })()}
 
               {/* Navigation Buttons */}
               <div className="flex justify-between mt-8">

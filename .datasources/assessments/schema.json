@@ -3,8 +3,8 @@
   "title": "风险评估记录",
   "schemas": [
     {
-      "name": "contact_frequency",
-      "title": "催收联系频率",
+      "name": "occupation",
+      "title": "职业",
       "type": "String"
     },
     {
