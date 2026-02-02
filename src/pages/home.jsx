@@ -141,7 +141,14 @@ export default function Home(props) {
             </div>
             <div className="flex items-start gap-3 sm:col-span-2">
               <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-              <p className="text-sm md:text-base text-[#64748B]">第三方催收或银行提供的解决方案需谨慎判断：1）要求提前支付高额费用或保证结果的方案需警惕；2）承诺减免本金但要求签署不平等协议的需核实；3）要求提供银行卡密码、验证码等敏感信息的应拒绝；4）任何方案建议咨询执业律师或金融监管部门确认合法性</p>
+              <div className="text-sm md:text-base text-[#64748B]">
+                <p className="font-semibold mb-2">第三方协议有效性确认方法：</p>
+                <p className="mb-2">1）核实第三方资质：通过国家企业信用信息公示系统查询企业注册信息，确认是否具备合法经营资质</p>
+                <p className="mb-2">2）检查协议关键条款：仔细阅读协议中的费用标准、违约责任、解约条件等条款，确认是否公平合理</p>
+                <p className="mb-2">3）验证银行官方渠道：通过银行官网、客服热线或线下网点核实协议是否为银行官方出具</p>
+                <p className="mb-2">4）咨询专业机构：将协议文本提交给执业律师或金融监管部门进行合法性审查</p>
+                <p>5）保留完整证据：保存所有沟通记录、协议文本、付款凭证等，以备后续维权使用</p>
+              </div>
             </div>
           </div>
         </div>
