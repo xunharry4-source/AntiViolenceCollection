@@ -63,12 +63,14 @@ export default function Assessment(props) {
       value: 'phone',
       label: '电话',
       risk: 1,
-      illegal: false
+      illegal: false,
+      handlingMethod: '1. 保持冷静，不要情绪化回应\n2. 记录通话时间、对方身份、通话内容\n3. 如对方态度恶劣，可要求更换客服人员\n4. 保留通话录音作为证据\n5. 明确告知对方您的还款意愿和困难'
     }, {
       value: 'sms',
       label: '短信',
       risk: 1,
-      illegal: false
+      illegal: false,
+      handlingMethod: '1. 保留所有短信截图作为证据\n2. 不要回复含有威胁或侮辱内容的短信\n3. 如短信内容违法，可向运营商投诉\n4. 定期清理短信，避免信息过载\n5. 通过短信与对方保持书面沟通'
     }, {
       value: 'visit',
       label: '上门',
@@ -81,12 +83,14 @@ export default function Assessment(props) {
       value: 'sued',
       label: '起诉',
       risk: 3,
-      illegal: false
+      illegal: false,
+      handlingMethod: '1. 认真阅读起诉状，了解对方诉求\n2. 在法定期限内提交答辩状\n3. 准备相关证据材料\n4. 咨询专业律师，了解法律程序\n5. 积极应诉，维护自身合法权益'
     }, {
       value: 'lawyer_letter',
       label: '律师函',
       risk: 2,
-      illegal: false
+      illegal: false,
+      handlingMethod: '1. 认真阅读律师函内容\n2. 核实律师函的真实性（可联系律师事务所确认）\n3. 不要被律师函吓倒，保持冷静\n4. 如有疑问，咨询专业律师\n5. 根据实际情况决定是否回应'
     }, {
       value: 'emergency_contact',
       label: '打紧急联系人电话',
@@ -176,10 +180,19 @@ export default function Assessment(props) {
       lawDetail: '频繁更换号码或平台进行催收属于逃避监管和持续骚扰行为',
       handlingMethod: '1. 保留所有不同号码和平台的催收记录\n2. 明确告知对方频繁更换联系方式违规\n3. 向监管部门投诉其逃避监管行为\n4. 如造成严重骚扰，可向公安机关报案\n5. 咨询律师，了解维权途径'
     }, {
+      value: 'request_personal_info',
+      label: '索要个人信息',
+      risk: 3,
+      illegal: true,
+      law: '《个人信息保护法》第5条：处理个人信息应当遵循合法、正当、必要和诚信原则，不得通过误导、欺诈、胁迫等方式处理个人信息。',
+      lawDetail: '催收过程中索要与债务无关的个人信息属于侵犯个人信息权益',
+      handlingMethod: '1. 明确拒绝提供与债务无关的个人信息\n2. 要求对方说明索要信息的合法依据\n3. 保留对方索要个人信息的证据（录音、聊天记录）\n4. 向监管部门投诉其侵犯个人信息\n5. 如对方持续骚扰，可向公安机关报案'
+    }, {
       value: 'other',
       label: '其他',
       risk: 2,
-      illegal: false
+      illegal: false,
+      handlingMethod: '1. 详细记录对方的催收方式\n2. 保留相关证据\n3. 咨询专业人士了解应对方法\n4. 如对方行为违法，及时投诉或报案'
     }]
   }, {
     id: 'debt_amount',
