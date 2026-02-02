@@ -670,47 +670,55 @@ export default function Assessment(props) {
 
             {/* Question Card */}
             <Card className="bg-white rounded-2xl p-4 md:p-8 shadow-xl">
-              <div className="mb-4 md:mb-8">
-                <h2 className="text-xl md:text-2xl font-bold font-['Space_Grotesk'] text-[#1E3A5F] mb-2 md:mb-3">
-                  {questions[currentStep].title}
-                </h2>
-                <p className="text-xs md:text-sm text-[#64748B]">{questions[currentStep].description}</p>
-              </div>
+              {(() => {
+            // 确保 currentStep 在有效范围内
+            const safeCurrentStep = currentStep >= 0 && currentStep < questions.length ? currentStep : 0;
+            const currentQuestion = questions[safeCurrentStep];
+            if (!currentQuestion) {
+              return <div className="text-center py-8">加载中...</div>;
+            }
+            return <>
+                  <div className="mb-4 md:mb-8">
+                    <h2 className="text-xl md:text-2xl font-bold font-['Space_Grotesk'] text-[#1E3A5F] mb-2 md:mb-3">
+                      {currentQuestion.title}
+                    </h2>
+                    <p className="text-xs md:text-sm text-[#64748B]">{currentQuestion.description}</p>
+                  </div>
 
-              <div className="space-y-2 md:space-y-4">
-                {questions[currentStep].options.map(option => {
-              const currentAnswer = answers[questions[currentStep].id];
-              const isMultiSelect = questions[currentStep].id === 'contact_method';
-              let isSelected;
-              if (isMultiSelect) {
-                const selectedValues = Array.isArray(currentAnswer?.value) ? currentAnswer.value : currentAnswer?.value ? [currentAnswer.value] : [];
-                isSelected = selectedValues.includes(option.value);
-              } else {
-                isSelected = currentAnswer?.value === option.value;
-              }
-              return <button key={option.value} onClick={() => handleAnswer(questions[currentStep].id, option.value, option.risk)} className={`w-full text-left p-3 md:p-4 rounded-xl border-2 transition-all duration-300 ${isSelected ? 'border-[#1E3A5F] bg-[#1E3A5F]/5' : 'border-slate-200 hover:border-[#1E3A5F]/30 hover:bg-slate-50'}`}>
+                  <div className="space-y-2 md:space-y-4">
+                    {currentQuestion.options.map(option => {
+                  const currentAnswer = answers[currentQuestion.id];
+                  const isMultiSelect = currentQuestion.id === 'contact_method';
+                  let isSelected;
+                  if (isMultiSelect) {
+                    const selectedValues = Array.isArray(currentAnswer?.value) ? currentAnswer.value : currentAnswer?.value ? [currentAnswer.value] : [];
+                    isSelected = selectedValues.includes(option.value);
+                  } else {
+                    isSelected = currentAnswer?.value === option.value;
+                  }
+                  return <button key={option.value} onClick={() => handleAnswer(currentQuestion.id, option.value, option.risk)} className={`w-full text-left p-3 md:p-4 rounded-xl border-2 transition-all duration-300 ${isSelected ? 'border-[#1E3A5F] bg-[#1E3A5F]/5' : 'border-slate-200 hover:border-[#1E3A5F]/30 hover:bg-slate-50'}`}>
                       <div className="flex items-center justify-between">
                         <span className="text-sm md:text-base font-medium text-[#1E3A5F]">{option.label}</span>
                         {isSelected && <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-[#1E3A5F]" />}
                       </div>
                     </button>;
-            })}
+                })}
               </div>
 
               {/* 其他催收方式输入框 */}
-              {questions[currentStep].id === 'contact_method' && (() => {
-            const currentAnswer = answers['contact_method'];
-            const selectedValues = Array.isArray(currentAnswer?.value) ? currentAnswer.value : currentAnswer?.value ? [currentAnswer.value] : [];
-            if (selectedValues.includes('other')) {
-              return <div className="mt-3 md:mt-4 p-3 md:p-4 bg-slate-50 rounded-xl border-2 border-[#1E3A5F]/20">
+              {currentQuestion.id === 'contact_method' && (() => {
+                const currentAnswer = answers['contact_method'];
+                const selectedValues = Array.isArray(currentAnswer?.value) ? currentAnswer.value : currentAnswer?.value ? [currentAnswer.value] : [];
+                if (selectedValues.includes('other')) {
+                  return <div className="mt-3 md:mt-4 p-3 md:p-4 bg-slate-50 rounded-xl border-2 border-[#1E3A5F]/20">
                       <label className="block text-xs md:text-sm font-medium text-[#1E3A5F] mb-2">
                         请具体说明其他催收方式
                       </label>
                       <Input value={otherContactMethod} onChange={e => setOtherContactMethod(e.target.value)} placeholder="例如：通过社交媒体联系、发送邮件等" className="w-full text-xs md:text-sm" />
                     </div>;
-            }
-            return null;
-          })()}
+                }
+                return null;
+              })()}
 
               {/* Navigation Buttons */}
               <div className="flex justify-between mt-6 md:mt-8 gap-3">
@@ -722,6 +730,8 @@ export default function Assessment(props) {
                   <ChevronRight className="w-3 h-3 md:w-4 md:h-4 ml-2" />
                 </Button>
               </div>
+                </>;
+          })()}
             </Card>
           </> : <>
             {/* Risk Result */}
