@@ -140,6 +140,17 @@ export default function Home(props) {
               <p className="text-sm md:text-base text-[#64748B]">不直接对抗催收，提供合法沟通指引</p>
             </div>
             <div className="flex items-start gap-3 sm:col-span-2">
+              <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+              <div className="text-sm md:text-base text-[#64748B]">
+                <p className="font-semibold mb-2 text-red-600">警惕"还一部分就解决问题"的诱导：</p>
+                <p className="mb-2">1）还一部分钱并不能解决债务问题，剩余债务仍需继续偿还</p>
+                <p className="mb-2">2）催收人员可能为了完成业绩而诱导还款，还款后仍会继续催收</p>
+                <p className="mb-2">3）部分还款可能被视为承认债务，反而加强债权人的追索力度</p>
+                <p className="mb-2">4）如需还款，应通过银行官方渠道，并要求出具书面还款协议</p>
+                <p>5）任何还款建议应先咨询执业律师，确认还款的合法性和必要性</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 sm:col-span-2">
               <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
               <div className="text-sm md:text-base text-[#64748B]">
                 <p className="font-semibold mb-2">第三方协议有效性确认方法：</p>
