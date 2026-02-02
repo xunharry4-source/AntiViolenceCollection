@@ -447,10 +447,12 @@ export default function Assessment(props) {
         return option && option.illegal;
       });
       if (illegalMethods.length > 0) {
-        suggestions.push('检测到违法催收行为：您遭遇了违法催收，请立即采取维权措施');
-        suggestions.push('收集违法证据：保留所有违法催收的证据，包括录音、短信、聊天记录');
-        suggestions.push('向监管部门投诉：向银保监会、公安机关等监管部门投诉违法催收行为');
-        suggestions.push('咨询专业律师：如违法催收造成严重后果，咨询专业律师了解维权途径');
+        suggestions.push('检测到违法催收行为：您遭遇了违法催收，请谨慎应对');
+        suggestions.push('优先与债权银行沟通：首先联系债权银行的官方客服，说明催收人员的违规行为，要求更换催收人员或调整催收方式');
+        suggestions.push('收集违法证据：保留所有违法催收的证据，包括录音、短信、聊天记录，作为与银行沟通的依据');
+        suggestions.push('避免直接投诉：不要立即向监管部门投诉，这可能导致银行直接起诉，应先尝试与银行协商解决');
+        suggestions.push('寻求内部投诉渠道：通过银行内部的投诉渠道（如客服热线、官网投诉）反映问题，通常比外部投诉更有效');
+        suggestions.push('咨询专业律师：如违法催收造成严重后果或银行不予处理，再咨询专业律师了解维权途径');
       } else {
         suggestions.push('催收方式合法：目前催收方式相对合法，保持正常沟通');
         suggestions.push('保持冷静：面对催收保持冷静，不要情绪化回应');
@@ -459,17 +461,17 @@ export default function Assessment(props) {
 
       // 检查是否有高频电话轰炸
       if (methods.includes('high_frequency')) {
-        suggestions.push('高频电话骚扰：遭遇高频电话轰炸，可向公安机关报案');
+        suggestions.push('高频电话骚扰：遭遇高频电话轰炸，先联系银行客服要求停止，如无效再向公安机关报案');
       }
 
       // 检查是否有上门催收
       if (methods.includes('visit')) {
-        suggestions.push('上门催收风险：上门催收可能侵犯隐私权，可报警处理');
+        suggestions.push('上门催收风险：上门催收可能侵犯隐私权，先联系银行客服要求停止，如无效可报警处理');
       }
 
       // 检查是否有威胁恐吓
       if (methods.includes('threat')) {
-        suggestions.push('威胁恐吓严重：威胁恐吓可能构成犯罪，立即向公安机关报案');
+        suggestions.push('威胁恐吓严重：威胁恐吓可能构成犯罪，立即向公安机关报案，同时联系银行客服投诉');
       }
       return suggestions;
     };
