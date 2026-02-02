@@ -402,32 +402,32 @@ export default function Assessment(props) {
   };
   return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 font-['JetBrains_Mono']">
       {/* Header */}
-      <header className="bg-[#1E3A5F] text-white py-4 px-8 shadow-lg">
+      <header className="bg-[#1E3A5F] text-white py-3 md:py-4 px-4 md:px-8 shadow-lg">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <button onClick={navigateBack} className="flex items-center gap-2 hover:bg-white/10 px-3 py-2 rounded-lg transition-colors">
-              <ArrowLeft className="w-5 h-5" />
-              <span>返回</span>
+          <div className="flex items-center gap-2 md:gap-3">
+            <button onClick={navigateBack} className="flex items-center gap-2 hover:bg-white/10 px-2 md:px-3 py-2 rounded-lg transition-colors">
+              <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" />
+              <span className="text-sm md:text-base">返回</span>
             </button>
           </div>
-          <div className="flex items-center gap-3">
-            <Shield className="w-8 h-8 text-[#F59E0B]" />
-            <span className="text-xl font-bold font-['Space_Grotesk']">风险评估</span>
+          <div className="flex items-center gap-2 md:gap-3">
+            <Shield className="w-6 h-6 md:w-8 md:h-8 text-[#F59E0B]" />
+            <span className="text-lg md:text-xl font-bold font-['Space_Grotesk']">风险评估</span>
           </div>
-          <div className="w-20"></div>
+          <div className="w-12 md:w-20"></div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-4xl mx-auto px-8 py-12">
+      <main className="max-w-4xl mx-auto px-4 md:px-8 py-6 md:py-12">
         {!riskLevel ? <>
             {/* Progress Bar */}
-            <div className="mb-8">
+            <div className="mb-4 md:mb-8">
               <div className="flex justify-between items-center mb-2">
-                <span className="text-sm text-[#64748B]">
+                <span className="text-xs md:text-sm text-[#64748B]">
                   问题 {currentStep + 1} / {questions.length}
                 </span>
-                <span className="text-sm font-semibold text-[#1E3A5F]">
+                <span className="text-xs md:text-sm font-semibold text-[#1E3A5F]">
                   {Math.round((currentStep + 1) / questions.length * 100)}%
                 </span>
               </div>
@@ -439,15 +439,15 @@ export default function Assessment(props) {
             </div>
 
             {/* Question Card */}
-            <Card className="bg-white rounded-2xl p-8 shadow-xl">
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold font-['Space_Grotesk'] text-[#1E3A5F] mb-3">
+            <Card className="bg-white rounded-2xl p-4 md:p-8 shadow-xl">
+              <div className="mb-4 md:mb-8">
+                <h2 className="text-xl md:text-2xl font-bold font-['Space_Grotesk'] text-[#1E3A5F] mb-2 md:mb-3">
                   {questions[currentStep].title}
                 </h2>
-                <p className="text-[#64748B]">{questions[currentStep].description}</p>
+                <p className="text-xs md:text-sm text-[#64748B]">{questions[currentStep].description}</p>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-2 md:space-y-4">
                 {questions[currentStep].options.map(option => {
               const currentAnswer = answers[questions[currentStep].id];
               const isMultiSelect = questions[currentStep].id === 'contact_method';
@@ -458,10 +458,10 @@ export default function Assessment(props) {
               } else {
                 isSelected = currentAnswer?.value === option.value;
               }
-              return <button key={option.value} onClick={() => handleAnswer(questions[currentStep].id, option.value, option.risk)} className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-300 ${isSelected ? 'border-[#1E3A5F] bg-[#1E3A5F]/5' : 'border-slate-200 hover:border-[#1E3A5F]/30 hover:bg-slate-50'}`}>
+              return <button key={option.value} onClick={() => handleAnswer(questions[currentStep].id, option.value, option.risk)} className={`w-full text-left p-3 md:p-4 rounded-xl border-2 transition-all duration-300 ${isSelected ? 'border-[#1E3A5F] bg-[#1E3A5F]/5' : 'border-slate-200 hover:border-[#1E3A5F]/30 hover:bg-slate-50'}`}>
                       <div className="flex items-center justify-between">
-                        <span className="font-medium text-[#1E3A5F]">{option.label}</span>
-                        {isSelected && <CheckCircle className="w-5 h-5 text-[#1E3A5F]" />}
+                        <span className="text-sm md:text-base font-medium text-[#1E3A5F]">{option.label}</span>
+                        {isSelected && <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-[#1E3A5F]" />}
                       </div>
                     </button>;
             })}
@@ -472,55 +472,55 @@ export default function Assessment(props) {
             const currentAnswer = answers['contact_method'];
             const selectedValues = Array.isArray(currentAnswer?.value) ? currentAnswer.value : currentAnswer?.value ? [currentAnswer.value] : [];
             if (selectedValues.includes('other')) {
-              return <div className="mt-4 p-4 bg-slate-50 rounded-xl border-2 border-[#1E3A5F]/20">
-                      <label className="block text-sm font-medium text-[#1E3A5F] mb-2">
+              return <div className="mt-3 md:mt-4 p-3 md:p-4 bg-slate-50 rounded-xl border-2 border-[#1E3A5F]/20">
+                      <label className="block text-xs md:text-sm font-medium text-[#1E3A5F] mb-2">
                         请具体说明其他催收方式
                       </label>
-                      <Input value={otherContactMethod} onChange={e => setOtherContactMethod(e.target.value)} placeholder="例如：通过社交媒体联系、发送邮件等" className="w-full" />
+                      <Input value={otherContactMethod} onChange={e => setOtherContactMethod(e.target.value)} placeholder="例如：通过社交媒体联系、发送邮件等" className="w-full text-xs md:text-sm" />
                     </div>;
             }
             return null;
           })()}
 
               {/* Navigation Buttons */}
-              <div className="flex justify-between mt-8">
-                <Button onClick={handlePrevious} disabled={currentStep === 0} variant="outline" className="px-6">
+              <div className="flex justify-between mt-6 md:mt-8 gap-3">
+                <Button onClick={handlePrevious} disabled={currentStep === 0} variant="outline" className="px-4 md:px-6 text-xs md:text-sm">
                   上一题
                 </Button>
-                <Button onClick={handleNext} className="bg-[#1E3A5F] hover:bg-[#0F2744] px-6">
+                <Button onClick={handleNext} className="bg-[#1E3A5F] hover:bg-[#0F2744] px-4 md:px-6 text-xs md:text-sm">
                   {currentStep === questions.length - 1 ? '查看结果' : '下一项'}
-                  <ChevronRight className="w-4 h-4 ml-2" />
+                  <ChevronRight className="w-3 h-3 md:w-4 md:h-4 ml-2" />
                 </Button>
               </div>
             </Card>
           </> : <>
             {/* Risk Result */}
-            <Card className="bg-white rounded-2xl p-8 shadow-xl">
+            <Card className="bg-white rounded-2xl p-4 md:p-8 shadow-xl">
               {(() => {
             const riskInfo = getRiskInfo(riskLevel.level);
             const RiskIcon = riskInfo.icon;
             return <>
-                    <div className="text-center mb-8">
-                      <div className="w-24 h-24 rounded-full mx-auto mb-4 flex items-center justify-center" style={{
+                    <div className="text-center mb-6 md:mb-8">
+                      <div className="w-16 h-16 md:w-24 md:h-24 rounded-full mx-auto mb-3 md:mb-4 flex items-center justify-center" style={{
                   backgroundColor: `${riskInfo.color}20`
                 }}>
-                        <RiskIcon className="w-12 h-12" style={{
+                        <RiskIcon className="w-8 h-8 md:w-12 md:h-12" style={{
                     color: riskInfo.color
                   }} />
                       </div>
-                      <h2 className="text-3xl font-bold font-['Space_Grotesk'] mb-2" style={{
+                      <h2 className="text-2xl md:text-3xl font-bold font-['Space_Grotesk'] mb-2" style={{
                   color: riskInfo.color
                 }}>
                         {riskInfo.title}
                       </h2>
-                      <p className="text-[#64748B]">{riskInfo.description}</p>
+                      <p className="text-xs md:text-sm text-[#64748B]">{riskInfo.description}</p>
                     </div>
 
                     {/* Risk Score */}
-                    <div className="bg-slate-50 rounded-xl p-6 mb-8">
+                    <div className="bg-slate-50 rounded-xl p-4 md:p-6 mb-6 md:mb-8">
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm text-[#64748B]">风险评分</span>
-                        <span className="text-2xl font-bold font-['Space_Grotesk'] text-[#1E3A5F]">
+                        <span className="text-xs md:text-sm text-[#64748B]">风险评分</span>
+                        <span className="text-xl md:text-2xl font-bold font-['Space_Grotesk'] text-[#1E3A5F]">
                           {riskLevel.totalRisk} / {questions.length * 3}
                         </span>
                       </div>
@@ -533,13 +533,13 @@ export default function Assessment(props) {
                     </div>
 
                     {/* Suggestions */}
-                    <div className="mb-8">
-                      <h3 className="text-xl font-bold font-['Space_Grotesk'] text-[#1E3A5F] mb-4">
+                    <div className="mb-6 md:mb-8">
+                      <h3 className="text-lg md:text-xl font-bold font-['Space_Grotesk'] text-[#1E3A5F] mb-3 md:mb-4">
                         建议措施
                       </h3>
-                      <div className="space-y-3">
-                        {riskInfo.suggestions.map((suggestion, index) => <div key={index} className="flex items-start gap-3">
-                            <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{
+                      <div className="space-y-2 md:space-y-3">
+                        {riskInfo.suggestions.map((suggestion, index) => <div key={index} className="flex items-start gap-2 md:gap-3">
+                            <div className="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{
                       backgroundColor: `${riskInfo.color}20`
                     }}>
                               <span className="text-xs font-bold" style={{
@@ -548,44 +548,44 @@ export default function Assessment(props) {
                                 {index + 1}
                               </span>
                             </div>
-                            <p className="text-[#64748B] leading-relaxed">{suggestion}</p>
+                            <p className="text-xs md:text-sm text-[#64748B] leading-relaxed">{suggestion}</p>
                           </div>)}
                       </div>
                     </div>
 
                     {/* Legal Warning - 如果有违法行为 */}
-                    {riskLevel.illegalBehaviors && riskLevel.illegalBehaviors.length > 0 && <div className="mb-8 bg-red-50 border-2 border-red-200 rounded-xl p-6">
-                        <div className="flex items-start gap-3 mb-4">
-                          <Scale className="w-6 h-6 text-red-600 flex-shrink-0 mt-1" />
+                    {riskLevel.illegalBehaviors && riskLevel.illegalBehaviors.length > 0 && <div className="mb-6 md:mb-8 bg-red-50 border-2 border-red-200 rounded-xl p-4 md:p-6">
+                        <div className="flex items-start gap-2 md:gap-3 mb-3 md:mb-4">
+                          <Scale className="w-5 h-5 md:w-6 md:h-6 text-red-600 flex-shrink-0 mt-1" />
                           <div>
-                            <h3 className="text-lg font-bold font-['Space_Grotesk'] text-red-700 mb-2">
+                            <h3 className="text-base md:text-lg font-bold font-['Space_Grotesk'] text-red-700 mb-2">
                               检测到可能的违法催收行为
                             </h3>
-                            <p className="text-sm text-red-600">
+                            <p className="text-xs md:text-sm text-red-600">
                               根据您提供的信息，以下催收方式可能违反相关法律法规，请注意保护自身权益。
                             </p>
                           </div>
                         </div>
-                        <div className="space-y-4">
-                          {riskLevel.illegalBehaviors.map((behavior, index) => <div key={index} className="bg-white rounded-lg p-4 border border-red-100">
+                        <div className="space-y-3 md:space-y-4">
+                          {riskLevel.illegalBehaviors.map((behavior, index) => <div key={index} className="bg-white rounded-lg p-3 md:p-4 border border-red-100">
                               <div className="flex items-start gap-2 mb-2">
-                                <FileText className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
-                                <span className="font-semibold text-red-700">{behavior.label}</span>
+                                <FileText className="w-3 h-3 md:w-4 md:h-4 text-red-600 flex-shrink-0 mt-0.5" />
+                                <span className="text-sm md:text-base font-semibold text-red-700">{behavior.label}</span>
                               </div>
-                              <p className="text-sm text-red-600 mb-2">{behavior.lawDetail}</p>
-                              <div className="bg-red-50 rounded p-3 mb-3">
+                              <p className="text-xs md:text-sm text-red-600 mb-2">{behavior.lawDetail}</p>
+                              <div className="bg-red-50 rounded p-2 md:p-3 mb-2 md:mb-3">
                                 <p className="text-xs text-red-700 font-medium mb-1">法律依据：</p>
                                 <p className="text-xs text-red-600 leading-relaxed">{behavior.law}</p>
                               </div>
-                              <div className="bg-amber-50 rounded p-3">
+                              <div className="bg-amber-50 rounded p-2 md:p-3">
                                 <p className="text-xs text-amber-700 font-medium mb-1">处理方法：</p>
                                 <p className="text-xs text-amber-600 leading-relaxed whitespace-pre-line">{behavior.handlingMethod}</p>
                               </div>
                             </div>)}
                         </div>
-                        <div className="mt-4 pt-4 border-t border-red-200">
-                          <p className="text-sm text-red-700 font-medium mb-2">建议采取以下措施：</p>
-                          <ul className="text-sm text-red-600 space-y-1 list-disc list-inside">
+                        <div className="mt-3 md:mt-4 pt-3 md:pt-4 border-t border-red-200">
+                          <p className="text-xs md:text-sm text-red-700 font-medium mb-2">建议采取以下措施：</p>
+                          <ul className="text-xs md:text-sm text-red-600 space-y-1 list-disc list-inside">
                             <li>保留所有违法催收的证据（通话录音、短信截图等）</li>
                             <li>向监管部门投诉（银保监会、地方金融监管局）</li>
                             <li>如情节严重，可向公安机关报案</li>
@@ -595,27 +595,27 @@ export default function Assessment(props) {
                       </div>}
 
                     {/* Risk Warning Card - 债务清算/协商代理风险提示 */}
-                    <div className="mb-8 bg-amber-50 border-2 border-amber-200 rounded-xl p-6">
-                      <div className="flex items-start gap-3 mb-4">
-                        <AlertCircle className="w-6 h-6 text-amber-600 flex-shrink-0 mt-1" />
+                    <div className="mb-6 md:mb-8 bg-amber-50 border-2 border-amber-200 rounded-xl p-4 md:p-6">
+                      <div className="flex items-start gap-2 md:gap-3 mb-3 md:mb-4">
+                        <AlertCircle className="w-5 h-5 md:w-6 md:h-6 text-amber-600 flex-shrink-0 mt-1" />
                         <div className="flex-1">
-                          <h3 className="text-lg font-bold font-['Space_Grotesk'] text-amber-700 mb-2">
+                          <h3 className="text-base md:text-lg font-bold font-['Space_Grotesk'] text-amber-700 mb-2">
                             风险提示｜关于"债务清算/债务协商代理"的常见风险
                           </h3>
-                          <p className="text-sm text-amber-600 mb-4">
+                          <p className="text-xs md:text-sm text-amber-600 mb-3 md:mb-4">
                             请注意：目前市场上存在以"债务清算""债务优化""停息挂账代理"等名义提供服务的机构或个人，其中部分存在较高风险。
                           </p>
                         </div>
                       </div>
 
                       {/* 常见风险信号 */}
-                      <div className="mb-4">
-                        <div className="flex items-center gap-2 mb-3">
-                          <AlertTriangle className="w-4 h-4 text-amber-600" />
-                          <h4 className="text-sm font-bold text-amber-700">常见风险信号包括：</h4>
+                      <div className="mb-3 md:mb-4">
+                        <div className="flex items-center gap-2 mb-2 md:mb-3">
+                          <AlertTriangle className="w-3 h-3 md:w-4 md:h-4 text-amber-600" />
+                          <h4 className="text-xs md:text-sm font-bold text-amber-700">常见风险信号包括：</h4>
                         </div>
-                        <ul className="space-y-2">
-                          {['要求提前支付服务费、保证金', '承诺"包成功""内部渠道""无需本人参与"', '要求提供身份证、银行卡、验证码等敏感信息', '要求通过个人账户或非官方渠道转账'].map((item, index) => <li key={index} className="flex items-start gap-2 text-sm text-amber-600">
+                        <ul className="space-y-1 md:space-y-2">
+                          {['要求提前支付服务费、保证金', '承诺"包成功""内部渠道""无需本人参与"', '要求提供身份证、银行卡、验证码等敏感信息', '要求通过个人账户或非官方渠道转账'].map((item, index) => <li key={index} className="flex items-start gap-2 text-xs md:text-sm text-amber-600">
                               <span className="text-amber-500 mt-1">•</span>
                               <span>{item}</span>
                             </li>)}
@@ -623,13 +623,13 @@ export default function Assessment(props) {
                       </div>
 
                       {/* 建议 */}
-                      <div className="mb-4">
-                        <div className="flex items-center gap-2 mb-3">
-                          <Info className="w-4 h-4 text-blue-600" />
-                          <h4 className="text-sm font-bold text-blue-700">建议：</h4>
+                      <div className="mb-3 md:mb-4">
+                        <div className="flex items-center gap-2 mb-2 md:mb-3">
+                          <Info className="w-3 h-3 md:w-4 md:h-4 text-blue-600" />
+                          <h4 className="text-xs md:text-sm font-bold text-blue-700">建议：</h4>
                         </div>
-                        <ul className="space-y-2">
-                          {['优先通过原债权机构的官方渠道了解协商政策', '谨慎对待第三方代理或中介服务'].map((item, index) => <li key={index} className="flex items-start gap-2 text-sm text-blue-600">
+                        <ul className="space-y-1 md:space-y-2">
+                          {['优先通过原债权机构的官方渠道了解协商政策', '谨慎对待第三方代理或中介服务'].map((item, index) => <li key={index} className="flex items-start gap-2 text-xs md:text-sm text-blue-600">
                               <span className="text-blue-500 mt-1">•</span>
                               <span>{item}</span>
                             </li>)}
@@ -637,7 +637,7 @@ export default function Assessment(props) {
                       </div>
 
                       {/* 声明 */}
-                      <div className="mt-4 pt-4 border-t border-amber-200">
+                      <div className="mt-3 md:mt-4 pt-3 md:pt-4 border-t border-amber-200">
                         <p className="text-xs text-amber-700 font-medium text-center">
                           ⚠️ 本产品不提供代理服务，也不收取协商相关费用
                         </p>
@@ -645,12 +645,12 @@ export default function Assessment(props) {
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="flex gap-4">
+                    <div className="flex gap-3 md:gap-4">
                       <Button onClick={() => {
                   setCurrentStep(0);
                   setAnswers({});
                   setRiskLevel(null);
-                }} variant="outline" className="flex-1">
+                }} variant="outline" className="flex-1 text-xs md:text-sm">
                         重新评估
                       </Button>
                       <Button onClick={() => navigateTo({
@@ -658,9 +658,9 @@ export default function Assessment(props) {
                   params: {
                     riskLevel: riskLevel.level
                   }
-                })} className="flex-1 bg-[#1E3A5F] hover:bg-[#0F2744]">
+                })} className="flex-1 bg-[#1E3A5F] hover:bg-[#0F2744] text-xs md:text-sm">
                         查看应对方案
-                        <ChevronRight className="w-4 h-4 ml-2" />
+                        <ChevronRight className="w-3 h-3 md:w-4 md:h-4 ml-2" />
                       </Button>
                     </div>
                   </>;
