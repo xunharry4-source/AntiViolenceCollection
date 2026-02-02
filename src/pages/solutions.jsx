@@ -268,7 +268,7 @@ export default function Solutions(props) {
     id: 3,
     title: '投诉要点',
     type: '信息型',
-    content: ['提供具体事实和时间', '保留相关证据（录音、截图、短信）', '说明受到的影响和损失', '提出合理的诉求', '保持客观和理性']
+    content: ['⚠️ 重要：请先与债权方客服沟通，说明问题并寻求解决方案', '如债权方客服沟通无效，再向监管机构投诉', '提供具体事实和时间（包括与债权方客服沟通的时间、内容）', '保留相关证据（录音、截图、短信、与客服的沟通记录）', '说明受到的影响和损失', '提出合理的诉求', '保持客观和理性']
   }];
   return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 font-['JetBrains_Mono']">
       {/* Header */}
