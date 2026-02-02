@@ -1,0 +1,93 @@
+[
+  {
+    "_id": "1",
+    "contact_frequency": "medium",
+    "contact_method": [
+      "phone",
+      "sms",
+      "non_working_hours"
+    ],
+    "debt_amount": "medium",
+    "payment_ability": "partial",
+    "legal_action": "notice",
+    "other_contact_method": "",
+    "risk_level": "medium",
+    "risk_percentage": 55,
+    "total_risk": 8,
+    "illegal_behaviors": [
+      {
+        "label": "非工时间联系",
+        "law": "《互联网金融逾期债务催收自律公约》第16条：催收人员应在每日8:00-22:00进行催收，不得在非工作时间进行催收。",
+        "lawDetail": "非工作时间（晚22:00-早8:00）催收违反行业自律规范",
+        "handlingMethod": "1. 明确告知对方非工作时间联系违规\n2. 要求对方只在工作时间联系\n3. 保留非工作时间联系的通话记录\n4. 向监管部门投诉其违规行为"
+      }
+    ],
+    "createdAt": 1738454400000,
+    "updatedAt": 1738454400000
+  },
+  {
+    "_id": "2",
+    "contact_frequency": "high",
+    "contact_method": [
+      "phone",
+      "sms",
+      "visit",
+      "emergency_contact",
+      "threat",
+      "high_frequency"
+    ],
+    "debt_amount": "large",
+    "payment_ability": "difficult",
+    "legal_action": "sued",
+    "other_contact_method": "",
+    "risk_level": "high",
+    "risk_percentage": 88,
+    "total_risk": 13,
+    "illegal_behaviors": [
+      {
+        "label": "上门",
+        "law": "《民法典》第1032条：自然人享有隐私权。任何组织或者个人不得以刺探、侵扰、泄露、公开等方式侵害他人的隐私权。",
+        "lawDetail": "未经同意上门催收可能构成非法侵入住宅或侵犯隐私权",
+        "handlingMethod": "1. 明确拒绝上门催收，要求通过电话或书面方式沟通\n2. 如对方坚持上门，可报警处理\n3. 保留对方上门的证据（录音、录像）\n4. 向监管部门投诉其违规行为"
+      },
+      {
+        "label": "打紧急联系人电话",
+        "law": "《个人信息保护法》第6条：处理个人信息应当具有明确、合理的目的，应当与处理目的直接相关，采取对个人权益影响最小的方式。",
+        "lawDetail": "未经授权联系紧急联系人属于侵犯个人信息权益",
+        "handlingMethod": "1. 明确告知对方未经授权联系紧急联系人违法\n2. 要求对方立即停止联系紧急联系人\n3. 保留通话记录和短信截图作为证据\n4. 向银保监会等监管部门投诉\n5. 如造成严重后果，可向法院起诉"
+      },
+      {
+        "label": "威胁或恐吓",
+        "law": "《刑法》第293条：有下列寻衅滋事行为之一，破坏社会秩序的，处五年以下有期徒刑、拘役或者管制：（二）追逐、拦截、辱骂、恐吓他人。",
+        "lawDetail": "威胁或恐吓可能构成寻衅滋事罪或其他违法犯罪行为",
+        "handlingMethod": "1. 立即保留威胁或恐吓的证据（录音、短信、聊天记录）\n2. 立即向公安机关报案，可能构成寻衅滋事罪\n3. 向监管部门投诉\n4. 咨询专业律师，了解刑事和民事维权途径\n5. 如人身安全受到威胁，立即报警并寻求保护"
+      },
+      {
+        "label": "高频电话轰炸",
+        "law": "《治安管理处罚法》第42条：多次发送淫秽、侮辱、恐吓或者其他信息，干扰他人正常生活的，处五日以下拘留或者五百元以下罚款。",
+        "lawDetail": "高频骚扰电话可能构成违法行为",
+        "handlingMethod": "1. 保留所有骚扰电话的通话记录和录音\n2. 明确告知对方停止骚扰行为\n3. 向公安机关报案，依据《治安管理处罚法》第42条\n4. 向监管部门投诉\n5. 如造成严重精神损害，可向法院起诉索赔"
+      }
+    ],
+    "createdAt": 1738540800000,
+    "updatedAt": 1738540800000
+  },
+  {
+    "_id": "3",
+    "contact_frequency": "low",
+    "contact_method": [
+      "phone",
+      "sms"
+    ],
+    "debt_amount": "small",
+    "payment_ability": "good",
+    "legal_action": "no",
+    "other_contact_method": "",
+    "risk_level": "low",
+    "risk_percentage": 20,
+    "total_risk": 3,
+    "illegal_behaviors": [],
+    "createdAt": 1738627200000,
+    "updatedAt": 1738627200000
+  }
+]

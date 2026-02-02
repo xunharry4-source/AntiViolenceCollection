@@ -1,0 +1,62 @@
+{
+  "name": "assessments",
+  "title": "风险评估记录",
+  "schemas": [
+    {
+      "name": "contact_frequency",
+      "title": "催收联系频率",
+      "type": "String"
+    },
+    {
+      "name": "contact_method",
+      "title": "催收方式",
+      "type": "Array",
+      "items": {
+        "type": "String"
+      }
+    },
+    {
+      "name": "debt_amount",
+      "title": "负债金额",
+      "type": "String"
+    },
+    {
+      "name": "payment_ability",
+      "title": "还款能力",
+      "type": "String"
+    },
+    {
+      "name": "legal_action",
+      "title": "法律行动",
+      "type": "String"
+    },
+    {
+      "name": "other_contact_method",
+      "title": "其他催收方式",
+      "type": "String"
+    },
+    {
+      "name": "risk_level",
+      "title": "风险等级",
+      "type": "String"
+    },
+    {
+      "name": "risk_percentage",
+      "title": "风险百分比",
+      "type": "Number"
+    },
+    {
+      "name": "total_risk",
+      "title": "总风险分数",
+      "type": "Number"
+    },
+    {
+      "name": "illegal_behaviors",
+      "title": "违法催收行为",
+      "type": "Array",
+      "items": {
+        "type": "Object"
+      }
+    }
+  ]
+}
