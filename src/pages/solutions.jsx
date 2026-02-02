@@ -121,38 +121,38 @@ export default function Solutions(props) {
   }];
   return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 font-['JetBrains_Mono']">
       {/* Header */}
-      <header className="bg-[#1E3A5F] text-white py-4 px-8 shadow-lg">
+      <header className="bg-[#1E3A5F] text-white py-3 md:py-4 px-4 md:px-8 shadow-lg">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <button onClick={navigateBack} className="flex items-center gap-2 hover:bg-white/10 px-3 py-2 rounded-lg transition-colors">
-              <ArrowLeft className="w-5 h-5" />
-              <span>返回</span>
+          <div className="flex items-center gap-2 md:gap-3">
+            <button onClick={navigateBack} className="flex items-center gap-2 hover:bg-white/10 px-2 md:px-3 py-2 rounded-lg transition-colors">
+              <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" />
+              <span className="text-sm md:text-base">返回</span>
             </button>
           </div>
-          <div className="flex items-center gap-3">
-            <FileText className="w-8 h-8 text-[#F59E0B]" />
-            <span className="text-xl font-bold font-['Space_Grotesk']">应对方案</span>
+          <div className="flex items-center gap-2 md:gap-3">
+            <FileText className="w-6 h-6 md:w-8 md:h-8 text-[#F59E0B]" />
+            <span className="text-lg md:text-xl font-bold font-['Space_Grotesk']">应对方案</span>
           </div>
-          <div className="w-20"></div>
+          <div className="w-12 md:w-20"></div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-8 py-12">
+      <main className="max-w-6xl mx-auto px-4 md:px-8 py-6 md:py-12">
         {/* Risk Level Indicator */}
-        <Card className="bg-white rounded-xl p-6 shadow-lg mb-8">
-          <div className="flex items-center justify-between">
+        <Card className="bg-white rounded-xl p-4 md:p-6 shadow-lg mb-6 md:mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
-              <h2 className="text-lg font-semibold font-['Space_Grotesk'] text-[#1E3A5F] mb-1">
+              <h2 className="text-base md:text-lg font-semibold font-['Space_Grotesk'] text-[#1E3A5F] mb-1">
                 当前风险等级
               </h2>
-              <p className="text-sm text-[#64748B]">
+              <p className="text-xs md:text-sm text-[#64748B]">
                 {riskLevel === 'low' && '低风险 - 保持沟通，按时还款'}
                 {riskLevel === 'medium' && '中等风险 - 主动协商，制定方案'}
                 {riskLevel === 'high' && '高风险 - 寻求专业帮助，谨慎应对'}
               </p>
             </div>
-            <div className={`px-4 py-2 rounded-lg font-semibold ${riskLevel === 'low' ? 'bg-green-100 text-green-700' : riskLevel === 'medium' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
+            <div className={`px-3 md:px-4 py-2 rounded-lg font-semibold text-xs md:text-sm ${riskLevel === 'low' ? 'bg-green-100 text-green-700' : riskLevel === 'medium' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
               {riskLevel === 'low' && '低风险'}
               {riskLevel === 'medium' && '中等风险'}
               {riskLevel === 'high' && '高风险'}
@@ -161,52 +161,52 @@ export default function Solutions(props) {
         </Card>
 
         {/* Tabs */}
-        <Tabs defaultValue="scripts" className="space-y-6">
-          <TabsList className="bg-white p-1 rounded-lg shadow">
-            <TabsTrigger value="scripts" className="flex items-center gap-2">
-              <MessageSquare className="w-4 h-4" />
+        <Tabs defaultValue="scripts" className="space-y-4 md:space-y-6">
+          <TabsList className="bg-white p-1 rounded-lg shadow w-full overflow-x-auto">
+            <TabsTrigger value="scripts" className="flex items-center gap-2 text-xs md:text-sm whitespace-nowrap">
+              <MessageSquare className="w-3 h-3 md:w-4 md:h-4" />
               话术模板
             </TabsTrigger>
-            <TabsTrigger value="checklists" className="flex items-center gap-2">
-              <ListChecks className="w-4 h-4" />
+            <TabsTrigger value="checklists" className="flex items-center gap-2 text-xs md:text-sm whitespace-nowrap">
+              <ListChecks className="w-3 h-3 md:w-4 md:h-4" />
               清单指引
             </TabsTrigger>
-            <TabsTrigger value="complaint" className="flex items-center gap-2">
-              <FileText className="w-4 h-4" />
+            <TabsTrigger value="complaint" className="flex items-center gap-2 text-xs md:text-sm whitespace-nowrap">
+              <FileText className="w-3 h-3 md:w-4 md:h-4" />
               投诉信息
             </TabsTrigger>
           </TabsList>
 
           {/* Scripts Tab */}
           <TabsContent value="scripts">
-            <div className="grid grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
               {/* 话术模板区域 - 占2列 */}
-              <div className="col-span-2 grid grid-cols-2 gap-6">
-                {negotiationScripts.map(script => <Card key={script.id} className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
-                    <div className="flex items-start justify-between mb-4">
+              <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                {negotiationScripts.map(script => <Card key={script.id} className="bg-white rounded-xl p-4 md:p-6 shadow-lg hover:shadow-xl transition-shadow">
+                    <div className="flex items-start justify-between mb-3 md:mb-4">
                       <div>
                         <span className="text-xs font-semibold text-[#F59E0B] uppercase tracking-wider">
                           {script.category}
                         </span>
-                        <h3 className="text-lg font-bold font-['Space_Grotesk'] text-[#1E3A5F] mt-1">
+                        <h3 className="text-base md:text-lg font-bold font-['Space_Grotesk'] text-[#1E3A5F] mt-1">
                           {script.title}
                         </h3>
                       </div>
                     </div>
-                    <div className="flex flex-wrap gap-2 mb-4">
+                    <div className="flex flex-wrap gap-2 mb-3 md:mb-4">
                       {script.tags.map(tag => <span key={tag} className="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded">
                           {tag}
                         </span>)}
                     </div>
-                    <p className="text-[#64748B] text-sm leading-relaxed mb-4">
+                    <p className="text-xs md:text-sm text-[#64748B] leading-relaxed mb-3 md:mb-4">
                       {script.content}
                     </p>
-                    <Button onClick={() => handleCopy(script.content, script.id)} variant="outline" size="sm" className="w-full">
+                    <Button onClick={() => handleCopy(script.content, script.id)} variant="outline" size="sm" className="w-full text-xs md:text-sm">
                       {copiedId === script.id ? <>
-                          <Check className="w-4 h-4 mr-2" />
+                          <Check className="w-3 h-3 md:w-4 md:h-4 mr-2" />
                           已复制
                         </> : <>
-                          <Copy className="w-4 h-4 mr-2" />
+                          <Copy className="w-3 h-3 md:w-4 md:h-4 mr-2" />
                           复制话术
                         </>}
                     </Button>
@@ -214,14 +214,14 @@ export default function Solutions(props) {
               </div>
 
               {/* 沟通注意事项区域 - 占1列 */}
-              <div className="col-span-1 space-y-6">
-                <Card className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-6 shadow-lg border-2 border-amber-200">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center">
-                      <AlertTriangle className="w-5 h-5 text-amber-600" />
+              <div className="lg:col-span-1 space-y-4 md:space-y-6">
+                <Card className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-4 md:p-6 shadow-lg border-2 border-amber-200">
+                  <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-amber-100 flex items-center justify-center">
+                      <AlertTriangle className="w-4 h-4 md:w-5 md:h-5 text-amber-600" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold font-['Space_Grotesk'] text-[#1E3A5F]">
+                      <h3 className="text-base md:text-lg font-bold font-['Space_Grotesk'] text-[#1E3A5F]">
                         沟通注意事项
                       </h3>
                       <p className="text-xs text-amber-600 font-semibold">
@@ -230,13 +230,13 @@ export default function Solutions(props) {
                     </div>
                   </div>
 
-                  <div className="space-y-6">
+                  <div className="space-y-4 md:space-y-6">
                     {communicationTips.map(tip => <div key={tip.id}>
-                        <h4 className="text-sm font-bold text-[#1E3A5F] mb-3 flex items-center gap-2">
+                        <h4 className="text-xs md:text-sm font-bold text-[#1E3A5F] mb-2 md:mb-3 flex items-center gap-2">
                           <span className="w-2 h-2 rounded-full bg-amber-500"></span>
                           {tip.title}
                         </h4>
-                        <ul className="space-y-2">
+                        <ul className="space-y-1 md:space-y-2">
                           {tip.tips.map((item, index) => <li key={index} className="flex items-start gap-2">
                               <span className="text-amber-500 mt-1">•</span>
                               <span className="text-xs text-[#64748B] leading-relaxed">{item}</span>
@@ -251,17 +251,17 @@ export default function Solutions(props) {
 
           {/* Checklists Tab */}
           <TabsContent value="checklists">
-            <div className="grid grid-cols-3 gap-6">
-              {checklists.map(checklist => <Card key={checklist.id} className="bg-white rounded-xl p-6 shadow-lg">
-                  <h3 className="text-lg font-bold font-['Space_Grotesk'] text-[#1E3A5F] mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+              {checklists.map(checklist => <Card key={checklist.id} className="bg-white rounded-xl p-4 md:p-6 shadow-lg">
+                  <h3 className="text-base md:text-lg font-bold font-['Space_Grotesk'] text-[#1E3A5F] mb-3 md:mb-4">
                     {checklist.title}
                   </h3>
-                  <ul className="space-y-3">
-                    {checklist.items.map((item, index) => <li key={index} className="flex items-start gap-3">
-                        <div className="w-5 h-5 rounded-full bg-[#10B981]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <Check className="w-3 h-3 text-[#10B981]" />
+                  <ul className="space-y-2 md:space-y-3">
+                    {checklist.items.map((item, index) => <li key={index} className="flex items-start gap-2 md:gap-3">
+                        <div className="w-4 h-4 md:w-5 md:h-5 rounded-full bg-[#10B981]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <Check className="w-2.5 h-2.5 md:w-3 md:h-3 text-[#10B981]" />
                         </div>
-                        <span className="text-sm text-[#64748B] leading-relaxed">{item}</span>
+                        <span className="text-xs md:text-sm text-[#64748B] leading-relaxed">{item}</span>
                       </li>)}
                   </ul>
                 </Card>)}
@@ -270,14 +270,14 @@ export default function Solutions(props) {
 
           {/* Complaint Tab */}
           <TabsContent value="complaint">
-            <div className="space-y-6">
-              {complaintInfo.map(info => <Card key={info.id} className="bg-white rounded-xl p-6 shadow-lg">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${info.type === '条件触发' ? 'bg-red-100' : 'bg-blue-100'}`}>
-                      <FileText className={`w-5 h-5 ${info.type === '条件触发' ? 'text-red-600' : 'text-blue-600'}`} />
+            <div className="space-y-4 md:space-y-6">
+              {complaintInfo.map(info => <Card key={info.id} className="bg-white rounded-xl p-4 md:p-6 shadow-lg">
+                  <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
+                    <div className={`w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center ${info.type === '条件触发' ? 'bg-red-100' : 'bg-blue-100'}`}>
+                      <FileText className={`w-4 h-4 md:w-5 md:h-5 ${info.type === '条件触发' ? 'text-red-600' : 'text-blue-600'}`} />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold font-['Space_Grotesk'] text-[#1E3A5F]">
+                      <h3 className="text-base md:text-lg font-bold font-['Space_Grotesk'] text-[#1E3A5F]">
                         {info.title}
                       </h3>
                       <span className={`text-xs font-semibold ${info.type === '条件触发' ? 'text-red-600' : 'text-blue-600'}`}>
@@ -285,11 +285,11 @@ export default function Solutions(props) {
                       </span>
                     </div>
                   </div>
-                  <div className="space-y-3">
-                    {info.content.map((item, index) => <div key={index} className={`p-4 rounded-lg ${info.type === '条件触发' ? 'bg-red-50 border-l-4 border-red-500' : 'bg-blue-50 border-l-4 border-blue-500'}`}>
-                        {typeof item === 'string' ? <p className="text-sm text-[#64748B]">{item}</p> : <div className="flex justify-between items-center">
-                            <span className="text-sm text-[#64748B]">{item.label}</span>
-                            <span className="text-sm font-semibold text-[#1E3A5F]">
+                  <div className="space-y-2 md:space-y-3">
+                    {info.content.map((item, index) => <div key={index} className={`p-3 md:p-4 rounded-lg ${info.type === '条件触发' ? 'bg-red-50 border-l-4 border-red-500' : 'bg-blue-50 border-l-4 border-blue-500'}`}>
+                        {typeof item === 'string' ? <p className="text-xs md:text-sm text-[#64748B]">{item}</p> : <div className="flex justify-between items-center">
+                            <span className="text-xs md:text-sm text-[#64748B]">{item.label}</span>
+                            <span className="text-xs md:text-sm font-semibold text-[#1E3A5F]">
                               {item.value}
                             </span>
                           </div>}
