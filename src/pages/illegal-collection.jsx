@@ -115,7 +115,8 @@ export default function IllegalCollection(props) {
             </div>
             <ul className="text-xs md:text-sm text-blue-600 space-y-2 md:space-y-3 list-disc list-inside">
               <li>保留所有违法催收的证据（通话录音、短信截图等）</li>
-              <li>向监管部门投诉（银保监会、地方金融监管局）</li>
+              <li>优先与债权银行沟通：首先联系债权银行的官方客服，说明催收人员的违规行为，要求更换催收人员或调整催收方式</li>
+              <li>如银行不予处理，再向监管部门投诉（银保监会、地方金融监管局）</li>
               <li>如情节严重，可向公安机关报案</li>
               <li>咨询专业律师，了解维权途径</li>
             </ul>
