@@ -17,8 +17,15 @@ export default function Assessment(props) {
     // 从本地存储恢复评估状态
     const savedAssessment = localStorage.getItem('assessment_result');
     if (savedAssessment) {
-      const parsed = JSON.parse(savedAssessment);
-      return parsed.completed ? parsed.currentStep : 0;
+      try {
+        const parsed = JSON.parse(savedAssessment);
+        // 验证数据结构是否完整
+        if (parsed.completed && parsed.currentStep) {
+          return parsed.currentStep;
+        }
+      } catch (error) {
+        console.error('Failed to parse saved assessment:', error);
+      }
     }
     return 0;
   });
@@ -26,8 +33,15 @@ export default function Assessment(props) {
     // 从本地存储恢复评估状态
     const savedAssessment = localStorage.getItem('assessment_result');
     if (savedAssessment) {
-      const parsed = JSON.parse(savedAssessment);
-      return parsed.completed ? parsed.answers : {};
+      try {
+        const parsed = JSON.parse(savedAssessment);
+        // 验证数据结构是否完整
+        if (parsed.completed && parsed.answers) {
+          return parsed.answers;
+        }
+      } catch (error) {
+        console.error('Failed to parse saved assessment:', error);
+      }
     }
     return {};
   });
@@ -35,8 +49,15 @@ export default function Assessment(props) {
     // 从本地存储恢复评估状态
     const savedAssessment = localStorage.getItem('assessment_result');
     if (savedAssessment) {
-      const parsed = JSON.parse(savedAssessment);
-      return parsed.completed ? parsed.riskLevel : null;
+      try {
+        const parsed = JSON.parse(savedAssessment);
+        // 验证数据结构是否完整
+        if (parsed.completed && parsed.riskLevel && parsed.riskLevel.level) {
+          return parsed.riskLevel;
+        }
+      } catch (error) {
+        console.error('Failed to parse saved assessment:', error);
+      }
     }
     return null;
   });
@@ -44,8 +65,15 @@ export default function Assessment(props) {
     // 从本地存储恢复评估状态
     const savedAssessment = localStorage.getItem('assessment_result');
     if (savedAssessment) {
-      const parsed = JSON.parse(savedAssessment);
-      return parsed.completed ? parsed.otherContactMethod : '';
+      try {
+        const parsed = JSON.parse(savedAssessment);
+        // 验证数据结构是否完整
+        if (parsed.completed && parsed.otherContactMethod !== undefined) {
+          return parsed.otherContactMethod;
+        }
+      } catch (error) {
+        console.error('Failed to parse saved assessment:', error);
+      }
     }
     return '';
   });
@@ -649,7 +677,13 @@ export default function Assessment(props) {
             {/* Risk Result */}
             <Card className="bg-white rounded-2xl p-4 md:p-8 shadow-xl">
               {(() => {
-            const riskInfo = getRiskInfo(riskLevel.level, answers);
+            const riskInfo = getRiskInfo(riskLevel.level, answers) || {
+              color: '#64748B',
+              icon: Info,
+              title: '评估结果',
+              description: '无法加载评估结果',
+              suggestions: ['请重新完成评估']
+            };
             const RiskIcon = riskInfo.icon;
             return <>
                     <div className="text-center mb-6 md:mb-8">
