@@ -557,41 +557,32 @@ export default function Assessment(props) {
                     {riskLevel.illegalBehaviors && riskLevel.illegalBehaviors.length > 0 && <div className="mb-6 md:mb-8 bg-red-50 border-2 border-red-200 rounded-xl p-4 md:p-6">
                         <div className="flex items-start gap-2 md:gap-3 mb-3 md:mb-4">
                           <Scale className="w-5 h-5 md:w-6 md:h-6 text-red-600 flex-shrink-0 mt-1" />
-                          <div>
+                          <div className="flex-1">
                             <h3 className="text-base md:text-lg font-bold font-['Space_Grotesk'] text-red-700 mb-2">
                               检测到可能的违法催收行为
                             </h3>
-                            <p className="text-xs md:text-sm text-red-600">
-                              根据您提供的信息，以下催收方式可能违反相关法律法规，请注意保护自身权益。
+                            <p className="text-xs md:text-sm text-red-600 mb-3 md:mb-4">
+                              根据您提供的信息，检测到 {riskLevel.illegalBehaviors.length} 种可能违反相关法律法规的催收方式，请注意保护自身权益。
                             </p>
                           </div>
                         </div>
-                        <div className="space-y-3 md:space-y-4">
+                        <div className="space-y-2 md:space-y-3 mb-3 md:mb-4">
                           {riskLevel.illegalBehaviors.map((behavior, index) => <div key={index} className="bg-white rounded-lg p-3 md:p-4 border border-red-100">
-                              <div className="flex items-start gap-2 mb-2">
+                              <div className="flex items-start gap-2">
                                 <FileText className="w-3 h-3 md:w-4 md:h-4 text-red-600 flex-shrink-0 mt-0.5" />
                                 <span className="text-sm md:text-base font-semibold text-red-700">{behavior.label}</span>
                               </div>
-                              <p className="text-xs md:text-sm text-red-600 mb-2">{behavior.lawDetail}</p>
-                              <div className="bg-red-50 rounded p-2 md:p-3 mb-2 md:mb-3">
-                                <p className="text-xs text-red-700 font-medium mb-1">法律依据：</p>
-                                <p className="text-xs text-red-600 leading-relaxed">{behavior.law}</p>
-                              </div>
-                              <div className="bg-amber-50 rounded p-2 md:p-3">
-                                <p className="text-xs text-amber-700 font-medium mb-1">处理方法：</p>
-                                <p className="text-xs text-amber-600 leading-relaxed whitespace-pre-line">{behavior.handlingMethod}</p>
-                              </div>
                             </div>)}
                         </div>
-                        <div className="mt-3 md:mt-4 pt-3 md:pt-4 border-t border-red-200">
-                          <p className="text-xs md:text-sm text-red-700 font-medium mb-2">建议采取以下措施：</p>
-                          <ul className="text-xs md:text-sm text-red-600 space-y-1 list-disc list-inside">
-                            <li>保留所有违法催收的证据（通话录音、短信截图等）</li>
-                            <li>向监管部门投诉（银保监会、地方金融监管局）</li>
-                            <li>如情节严重，可向公安机关报案</li>
-                            <li>咨询专业律师，了解维权途径</li>
-                          </ul>
-                        </div>
+                        <Button onClick={() => navigateTo({
+                  pageId: 'illegal-collection',
+                  params: {
+                    illegalBehaviors: encodeURIComponent(JSON.stringify(riskLevel.illegalBehaviors))
+                  }
+                })} className="w-full bg-red-600 hover:bg-red-700 text-white text-xs md:text-sm">
+                          查看违法催收行为详情
+                          <ChevronRight className="w-3 h-3 md:w-4 md:h-4 ml-2" />
+                        </Button>
                       </div>}
 
                     {/* Risk Warning Card - 债务清算/协商代理风险提示 */}
@@ -607,41 +598,12 @@ export default function Assessment(props) {
                           </p>
                         </div>
                       </div>
-
-                      {/* 常见风险信号 */}
-                      <div className="mb-3 md:mb-4">
-                        <div className="flex items-center gap-2 mb-2 md:mb-3">
-                          <AlertTriangle className="w-3 h-3 md:w-4 md:h-4 text-amber-600" />
-                          <h4 className="text-xs md:text-sm font-bold text-amber-700">常见风险信号包括：</h4>
-                        </div>
-                        <ul className="space-y-1 md:space-y-2">
-                          {['要求提前支付服务费、保证金', '承诺"包成功""内部渠道""无需本人参与"', '要求提供身份证、银行卡、验证码等敏感信息', '要求通过个人账户或非官方渠道转账'].map((item, index) => <li key={index} className="flex items-start gap-2 text-xs md:text-sm text-amber-600">
-                              <span className="text-amber-500 mt-1">•</span>
-                              <span>{item}</span>
-                            </li>)}
-                        </ul>
-                      </div>
-
-                      {/* 建议 */}
-                      <div className="mb-3 md:mb-4">
-                        <div className="flex items-center gap-2 mb-2 md:mb-3">
-                          <Info className="w-3 h-3 md:w-4 md:h-4 text-blue-600" />
-                          <h4 className="text-xs md:text-sm font-bold text-blue-700">建议：</h4>
-                        </div>
-                        <ul className="space-y-1 md:space-y-2">
-                          {['优先通过原债权机构的官方渠道了解协商政策', '谨慎对待第三方代理或中介服务'].map((item, index) => <li key={index} className="flex items-start gap-2 text-xs md:text-sm text-blue-600">
-                              <span className="text-blue-500 mt-1">•</span>
-                              <span>{item}</span>
-                            </li>)}
-                        </ul>
-                      </div>
-
-                      {/* 声明 */}
-                      <div className="mt-3 md:mt-4 pt-3 md:pt-4 border-t border-amber-200">
-                        <p className="text-xs text-amber-700 font-medium text-center">
-                          ⚠️ 本产品不提供代理服务，也不收取协商相关费用
-                        </p>
-                      </div>
+                      <Button onClick={() => navigateTo({
+                  pageId: 'risk-warning'
+                })} className="w-full bg-amber-600 hover:bg-amber-700 text-white text-xs md:text-sm">
+                          查看风险提示详情
+                          <ChevronRight className="w-3 h-3 md:w-4 md:h-4 ml-2" />
+                        </Button>
                     </div>
 
                     {/* Action Buttons */}
