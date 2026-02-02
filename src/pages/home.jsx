@@ -120,24 +120,24 @@ export default function Home(props) {
         {/* What We Don't Do */}
         <div className="bg-white rounded-2xl p-4 md:p-8 shadow-lg">
           <h3 className="text-xl md:text-2xl font-bold font-['Space_Grotesk'] text-[#1E3A5F] mb-4 md:mb-6">
-            明确不做
+            说明
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
             <div className="flex items-start gap-3">
-              <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-              <p className="text-sm md:text-base text-[#64748B]">不代替律师</p>
+              <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+              <p className="text-sm md:text-base text-[#64748B]">不代替律师，仅提供一般性信息</p>
             </div>
             <div className="flex items-start gap-3">
-              <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-              <p className="text-sm md:text-base text-[#64748B]">不提供确定性法律结论</p>
+              <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+              <p className="text-sm md:text-base text-[#64748B]">不提供确定性法律结论，具体法律问题请咨询执业律师</p>
             </div>
             <div className="flex items-start gap-3">
-              <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-              <p className="text-sm md:text-base text-[#64748B]">不教逃避债务</p>
+              <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+              <p className="text-sm md:text-base text-[#64748B]">不教逃避债务，倡导理性协商解决</p>
             </div>
             <div className="flex items-start gap-3">
-              <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-              <p className="text-sm md:text-base text-[#64748B]">不直接对抗催收</p>
+              <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+              <p className="text-sm md:text-base text-[#64748B]">不直接对抗催收，提供合法沟通指引</p>
             </div>
           </div>
         </div>
