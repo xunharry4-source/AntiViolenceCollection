@@ -141,7 +141,7 @@ export default function Home(props) {
             </div>
             <div className="flex items-start gap-3 sm:col-span-2">
               <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-              <p className="text-sm md:text-base text-[#64748B]">不评估第三方催收或银行提供的解决方案是否有效，请自行判断或咨询专业人士</p>
+              <p className="text-sm md:text-base text-[#64748B]">第三方催收或银行提供的解决方案需谨慎判断：1）要求提前支付高额费用或保证结果的方案需警惕；2）承诺减免本金但要求签署不平等协议的需核实；3）要求提供银行卡密码、验证码等敏感信息的应拒绝；4）任何方案建议咨询执业律师或金融监管部门确认合法性</p>
             </div>
           </div>
         </div>
