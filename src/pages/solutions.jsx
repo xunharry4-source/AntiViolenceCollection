@@ -15,6 +15,157 @@ export default function Solutions(props) {
   } = props.$w.utils;
   const riskLevel = props.$w.page.dataset.params.riskLevel || 'medium';
   const [copiedId, setCopiedId] = useState(null);
+
+  // 从 localStorage 获取评估结果
+  const [assessmentResult, setAssessmentResult] = useState(() => {
+    const savedAssessment = localStorage.getItem('assessment_result');
+    if (savedAssessment) {
+      const parsed = JSON.parse(savedAssessment);
+      return parsed.completed ? parsed : null;
+    }
+    return null;
+  });
+
+  // 获取用户选择的催收方式
+  const selectedContactMethods = assessmentResult?.answers?.contact_method?.value || [];
+
+  // 根据选择的催收方式生成针对性应对方案
+  const getTargetedSolutions = () => {
+    if (!assessmentResult || selectedContactMethods.length === 0) {
+      return [];
+    }
+
+    // 催收方式选项定义（与 assessment.jsx 保持一致）
+    const contactOptions = [{
+      value: 'phone',
+      label: '电话',
+      handlingMethod: '1. 保持冷静，不要情绪化回应\n2. 记录通话时间、对方身份、通话内容\n3. 如对方态度恶劣，可要求更换客服人员\n4. 保留通话录音作为证据\n5. 明确告知对方您的还款意愿和困难'
+    }, {
+      value: 'sms',
+      label: '短信',
+      handlingMethod: '1. 保留所有短信截图作为证据\n2. 不要回复含有威胁或侮辱内容的短信\n3. 如短信内容违法，可向运营商投诉\n4. 定期清理短信，避免信息过载\n5. 通过短信与对方保持书面沟通'
+    }, {
+      value: 'visit',
+      label: '上门',
+      illegal: true,
+      law: '《民法典》第1032条：自然人享有隐私权。任何组织或者个人不得以刺探、侵扰、泄露、公开等方式侵害他人的隐私权。',
+      lawDetail: '未经同意上门催收可能构成非法侵入住宅或侵犯隐私权',
+      handlingMethod: '1. 明确拒绝上门催收，要求通过电话或书面方式沟通\n2. 如对方坚持上门，可报警处理\n3. 保留对方上门的证据（录音、录像）\n4. 向监管部门投诉其违规行为'
+    }, {
+      value: 'sued',
+      label: '起诉',
+      handlingMethod: '1. 认真阅读起诉状，了解对方诉求\n2. 在法定期限内提交答辩状\n3. 准备相关证据材料\n4. 咨询专业律师，了解法律程序\n5. 积极应诉，维护自身合法权益'
+    }, {
+      value: 'lawyer_letter',
+      label: '律师函',
+      handlingMethod: '1. 认真阅读律师函内容\n2. 核实律师函的真实性（可联系律师事务所确认）\n3. 不要被律师函吓倒，保持冷静\n4. 如有疑问，咨询专业律师\n5. 根据实际情况决定是否回应'
+    }, {
+      value: 'emergency_contact',
+      label: '打紧急联系人电话',
+      illegal: true,
+      law: '《个人信息保护法》第6条：处理个人信息应当具有明确、合理的目的，应当与处理目的直接相关，采取对个人权益影响最小的方式。',
+      lawDetail: '未经授权联系紧急联系人属于侵犯个人信息权益',
+      handlingMethod: '1. 明确告知对方未经授权联系紧急联系人违法\n2. 要求对方立即停止联系紧急联系人\n3. 保留通话记录和短信截图作为证据\n4. 向银保监会等监管部门投诉\n5. 如造成严重后果，可向法院起诉'
+    }, {
+      value: 'wechat_private',
+      label: '强烈要求加微信/私下沟通',
+      illegal: true,
+      law: '《互联网金融逾期债务催收自律公约》第18条：催收人员不得诱导或逼迫债务人通过违法违规途径筹集资金。',
+      lawDetail: '要求私下沟通可能涉及不当要求或诱导违规行为',
+      handlingMethod: '1. 拒绝添加微信，坚持通过官方渠道沟通\n2. 保留对方要求私下沟通的聊天记录\n3. 警惕对方可能提出的不当要求\n4. 如对方持续骚扰，可向监管部门投诉'
+    }, {
+      value: 'non_working_hours',
+      label: '非工时间联系',
+      illegal: true,
+      law: '《互联网金融逾期债务催收自律公约》第16条：催收人员应在每日8:00-22:00进行催收，不得在非工作时间进行催收。',
+      lawDetail: '非工作时间（晚22:00-早8:00）催收违反行业自律规范',
+      handlingMethod: '1. 明确告知对方非工作时间联系违规\n2. 要求对方只在工作时间联系\n3. 保留非工作时间联系的通话记录\n4. 向监管部门投诉其违规行为'
+    }, {
+      value: 'auto_robot',
+      label: '自动语音与机器人外呼',
+      illegal: true,
+      law: '《个人信息保护法》第24条：通过自动化决策方式向个人进行信息推送、营销，应当提供不针对其个人特征的选项或提供便捷的拒绝方式。',
+      lawDetail: '未经同意的自动外呼可能侵犯个人信息权益',
+      handlingMethod: '1. 明确拒绝自动外呼，要求人工客服沟通\n2. 保留自动外呼的录音证据\n3. 向运营商投诉骚扰电话\n4. 向监管部门投诉其违规使用自动化催收'
+    }, {
+      value: 'high_frequency',
+      label: '高频电话轰炸',
+      illegal: true,
+      law: '《治安管理处罚法》第42条：多次发送淫秽、侮辱、恐吓或者其他信息，干扰他人正常生活的，处五日以下拘留或者五百元以下罚款。',
+      lawDetail: '高频骚扰电话可能构成违法行为',
+      handlingMethod: '1. 保留所有骚扰电话的通话记录和录音\n2. 明确告知对方停止骚扰行为\n3. 向公安机关报案，依据《治安管理处罚法》第42条\n4. 向监管部门投诉\n5. 如造成严重精神损害，可向法院起诉索赔'
+    }, {
+      value: 'third_party',
+      label: '第三方（亲友、单位）',
+      illegal: true,
+      law: '《个人信息保护法》第6条：处理个人信息应当具有明确、合理的目的，应当与处理目的直接相关。',
+      lawDetail: '未经授权向第三方泄露债务信息属于侵犯个人信息权益',
+      handlingMethod: '1. 明确告知对方未经授权向第三方泄露信息违法\n2. 要求对方立即停止联系第三方\n3. 保留对方联系第三方的证据\n4. 向监管部门投诉其侵犯个人信息\n5. 如造成名誉损害，可向法院起诉'
+    }, {
+      value: 'threat',
+      label: '威胁或恐吓',
+      illegal: true,
+      law: '《刑法》第293条：有下列寻衅滋事行为之一，破坏社会秩序的，处五年以下有期徒刑、拘役或者管制：（二）追逐、拦截、辱骂、恐吓他人。',
+      lawDetail: '威胁或恐吓可能构成寻衅滋事罪或其他违法犯罪行为',
+      handlingMethod: '1. 立即保留威胁或恐吓的证据（录音、短信、聊天记录）\n2. 立即向公安机关报案，可能构成寻衅滋事罪\n3. 向监管部门投诉\n4. 咨询专业律师，了解刑事和民事维权途径\n5. 如人身安全受到威胁，立即报警并寻求保护'
+    }, {
+      value: 'fake_police',
+      label: '冒充公检法',
+      illegal: true,
+      law: '《刑法》第279条：冒充国家机关工作人员招摇撞骗的，处三年以下有期徒刑、拘役、管制或者剥夺政治权利；情节严重的，处三年以上十年以下有期徒刑。',
+      lawDetail: '冒充公安、检察院、法院等国家机关工作人员进行催收属于严重违法犯罪行为',
+      handlingMethod: '1. 立即保留对方冒充公检法的证据（录音、短信、聊天记录）\n2. 立即向公安机关报案，可能构成招摇撞骗罪\n3. 向银保监会等监管部门投诉\n4. 咨询专业律师，了解刑事和民事维权途径\n5. 不要向对方转账或提供任何个人信息'
+    }, {
+      value: 'unofficial_payment',
+      label: '非官方收款',
+      illegal: true,
+      law: '《刑法》第266条：诈骗公私财物，数额较大的，处三年以下有期徒刑、拘役或者管制，并处或者单处罚金。',
+      lawDetail: '要求向非官方账户还款可能构成诈骗或非法集资',
+      handlingMethod: '1. 立即停止向非官方账户转账\n2. 保留对方要求非官方收款的证据\n3. 向公安机关报案，可能构成诈骗罪\n4. 向监管部门投诉\n5. 只通过官方渠道还款'
+    }, {
+      value: 'third_party_outsource',
+      label: '第三方外包催促',
+      illegal: true,
+      law: '《个人信息保护法》第21条：个人信息处理者委托处理个人信息的，应当与受托人约定委托处理的目的、期限、处理方式、个人信息的种类、保护措施以及双方的权利和义务。',
+      lawDetail: '未经授权将债务信息外包给第三方催收可能侵犯个人信息权益',
+      handlingMethod: '1. 明确告知对方未经授权外包催收违法\n2. 要求对方停止第三方催收行为\n3. 保留第三方催收的证据\n4. 向监管部门投诉其违规外包\n5. 如造成名誉损害，可向法院起诉'
+    }, {
+      value: 'frequent_change',
+      label: '频繁更换号码/平台',
+      illegal: true,
+      law: '《互联网金融逾期债务催收自律公约》第14条：催收人员不得频繁更换联系方式或平台进行骚扰。',
+      lawDetail: '频繁更换号码或平台进行催收属于逃避监管和持续骚扰行为',
+      handlingMethod: '1. 保留所有不同号码和平台的催收记录\n2. 明确告知对方频繁更换联系方式违规\n3. 向监管部门投诉其逃避监管行为\n4. 如造成严重骚扰，可向公安机关报案\n5. 咨询律师，了解维权途径'
+    }, {
+      value: 'request_personal_info',
+      label: '索要个人信息',
+      illegal: true,
+      law: '《个人信息保护法》第5条：处理个人信息应当遵循合法、正当、必要和诚信原则，不得通过误导、欺诈、胁迫等方式处理个人信息。',
+      lawDetail: '催收过程中索要与债务无关的个人信息属于侵犯个人信息权益',
+      handlingMethod: '1. 明确拒绝提供与债务无关的个人信息\n2. 要求对方说明索要信息的合法依据\n3. 保留对方索要个人信息的证据（录音、聊天记录）\n4. 向监管部门投诉其侵犯个人信息\n5. 如对方持续骚扰，可向公安机关报案'
+    }, {
+      value: 'other',
+      label: '其他',
+      handlingMethod: '1. 详细记录对方的催收方式\n2. 保留相关证据\n3. 咨询专业人士了解应对方法\n4. 如对方行为违法，及时投诉或报案'
+    }];
+
+    // 根据用户选择的催收方式生成针对性方案
+    return selectedContactMethods.map(methodValue => {
+      const option = contactOptions.find(opt => opt.value === methodValue);
+      if (!option) return null;
+      return {
+        id: `targeted-${option.value}`,
+        title: `针对「${option.label}」的应对方案`,
+        category: '针对性方案',
+        content: option.handlingMethod,
+        tags: option.illegal ? ['违法行为', '紧急处理'] : ['常规处理'],
+        illegal: option.illegal || false,
+        law: option.law || null,
+        lawDetail: option.lawDetail || null
+      };
+    }).filter(Boolean);
+  };
+  const targetedSolutions = getTargetedSolutions();
   const handleCopy = (text, id) => {
     navigator.clipboard.writeText(text);
     setCopiedId(id);
@@ -161,8 +312,12 @@ export default function Solutions(props) {
         </Card>
 
         {/* Tabs */}
-        <Tabs defaultValue="scripts" className="space-y-4 md:space-y-6">
+        <Tabs defaultValue={targetedSolutions.length > 0 ? 'targeted' : 'scripts'} className="space-y-4 md:space-y-6">
           <TabsList className="bg-white p-1 rounded-lg shadow w-full overflow-x-auto">
+            {targetedSolutions.length > 0 && <TabsTrigger value="targeted" className="flex items-center gap-2 text-xs md:text-sm whitespace-nowrap">
+              <AlertTriangle className="w-3 h-3 md:w-4 md:h-4" />
+              针对性方案
+            </TabsTrigger>}
             <TabsTrigger value="scripts" className="flex items-center gap-2 text-xs md:text-sm whitespace-nowrap">
               <MessageSquare className="w-3 h-3 md:w-4 md:h-4" />
               话术模板
@@ -180,6 +335,56 @@ export default function Solutions(props) {
               沟通注意事项
             </TabsTrigger>
           </TabsList>
+
+          {/* Targeted Solutions Tab */}
+          {targetedSolutions.length > 0 && <TabsContent value="targeted">
+            <div className="space-y-4 md:space-y-6">
+              {targetedSolutions.map(solution => <Card key={solution.id} className={`${solution.illegal ? 'bg-gradient-to-br from-red-50 to-orange-50 border-2 border-red-200' : 'bg-white'} rounded-xl p-4 md:p-6 shadow-lg hover:shadow-xl transition-shadow`}>
+                  <div className="flex items-start justify-between mb-3 md:mb-4">
+                    <div>
+                      <span className={`text-xs font-semibold uppercase tracking-wider ${solution.illegal ? 'text-red-600' : 'text-[#F59E0B]'}`}>
+                        {solution.category}
+                      </span>
+                      <h3 className={`text-base md:text-lg font-bold font-['Space_Grotesk'] mt-1 ${solution.illegal ? 'text-red-700' : 'text-[#1E3A5F]'}`}>
+                        {solution.title}
+                      </h3>
+                    </div>
+                    {solution.illegal && <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
+                        <AlertTriangle className="w-4 h-4 md:w-5 md:h-5 text-red-600" />
+                      </div>}
+                  </div>
+                  
+                  {solution.illegal && solution.law && <div className="mb-3 md:mb-4 p-3 md:p-4 bg-red-100 border-l-4 border-red-500 rounded-r-lg">
+                      <p className="text-xs font-semibold text-red-700 mb-1">相关法律：</p>
+                      <p className="text-xs text-red-600 leading-relaxed">{solution.law}</p>
+                      {solution.lawDetail && <p className="text-xs text-red-600 leading-relaxed mt-2">{solution.lawDetail}</p>}
+                    </div>}
+                  
+                  <div className="mb-3 md:mb-4">
+                    <p className="text-xs font-semibold text-[#1E3A5F] mb-2">应对方法：</p>
+                    <p className="text-xs md:text-sm text-[#64748B] leading-relaxed whitespace-pre-line">
+                      {solution.content}
+                    </p>
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-2 mb-3 md:mb-4">
+                    {solution.tags.map(tag => <span key={tag} className={`px-2 py-1 text-xs rounded ${solution.illegal ? 'bg-red-100 text-red-700' : 'bg-slate-100 text-slate-600'}`}>
+                        {tag}
+                      </span>)}
+                  </div>
+                  
+                  <Button onClick={() => handleCopy(solution.content, solution.id)} variant={solution.illegal ? 'default' : 'outline'} size="sm" className={`w-full text-xs md:text-sm ${solution.illegal ? 'bg-red-600 hover:bg-red-700 text-white' : ''}`}>
+                    {copiedId === solution.id ? <>
+                        <Check className="w-3 h-3 md:w-4 md:h-4 mr-2" />
+                        已复制
+                      </> : <>
+                        <Copy className="w-3 h-3 md:w-4 md:h-4 mr-2" />
+                        复制方案
+                      </>}
+                  </Button>
+                </Card>)}
+            </div>
+          </TabsContent>}
 
           {/* Scripts Tab */}
           <TabsContent value="scripts">
