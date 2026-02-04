@@ -29,7 +29,9 @@ export default function IllegalCollection(props) {
               <span className="text-sm md:text-base">返回</span>
             </button>
           </div>
-          <div className="flex items-center gap-2 md:gap-3">
+          <div className="flex items-center gap-2 md:gap-3 cursor-pointer hover:bg-white/10 px-2 md:px-3 py-2 rounded-lg transition-colors" onClick={() => navigateTo({
+          pageId: 'home'
+        })}>
             <Scale className="w-6 h-6 md:w-8 md:h-8 text-[#F59E0B]" />
             <span className="text-lg md:text-xl font-bold font-['Space_Grotesk']">违法催收行为</span>
           </div>

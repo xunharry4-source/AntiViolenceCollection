@@ -1416,7 +1416,9 @@ export default function Knowledge(props) {
               <span>返回</span>
             </button>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 cursor-pointer hover:bg-white/10 px-3 py-2 rounded-lg transition-colors" onClick={() => navigateTo({
+          pageId: 'home'
+        })}>
             <Scale className="w-8 h-8 text-[#F59E0B]" />
             <span className="text-xl font-bold font-['Space_Grotesk']">法律知识库</span>
           </div>
